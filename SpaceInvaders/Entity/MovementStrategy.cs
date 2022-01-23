@@ -14,6 +14,7 @@ namespace SpaceInvaders.Entity
 
     public class StandardEnemyMovementStrategy : IEnemyMovementStrategy
     {
+        //lewo prawo
         public void Move(Enemy entity)
         {
             throw new NotImplementedException();

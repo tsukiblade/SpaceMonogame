@@ -34,7 +34,8 @@ namespace SpaceInvaders.Entity
         public PlayerShip()
         {
             Image = Art.Player;
-            Position = Game1.ScreenSize / 2;
+            Orientation = new Vector2(0,1).ToAngle();
+            Position = new Vector2(Game1.ScreenSize.X/2, Game1.ScreenSize.Y);
             Radius = 10;
         }
 
@@ -54,14 +55,15 @@ namespace SpaceInvaders.Entity
                 return;
             }
 
-            Velocity += Speed * Input.GetMovementDirection();
+            //Velocity += Speed * Input.GetMovementDirection();
+            Velocity += Speed * Input.GetMovementInput();
             Position += Velocity;
             Position = Vector2.Clamp(Position, Size / 2, Game1.ScreenSize - (Size / 2));
 
-            if (Velocity.LengthSquared() > 0)
-            {
-                Orientation = Velocity.ToAngle();
-            }
+            //if (Velocity.LengthSquared() > 0)
+            //{
+            //    Orientation = Velocity.ToAngle();
+            //}
 
             Velocity = Vector2.Zero;
         }
@@ -78,6 +80,11 @@ namespace SpaceInvaders.Entity
         {
             PlayerContext.Instance.RemoveLife();
             _framesUntilRespawn = PlayerContext.Instance.IsGameOver ? 300 : 120;
+        }
+
+        public Bullet FireBullet()
+        {
+            return new Bullet(Art.Bullet, Position, new Vector2(0, -11f));
         }
     }
 }

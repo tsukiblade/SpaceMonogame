@@ -6,7 +6,10 @@ namespace SpaceInvaders.Core
 {
     public sealed class PlayerContext
     {
-        private PlayerContext() {}
+        private PlayerContext()
+        {
+            Reset();
+        }
 
         private static PlayerContext _instance;
 

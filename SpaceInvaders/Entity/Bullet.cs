@@ -26,6 +26,12 @@ namespace SpaceInvaders.Entity
             }
             
             Position += Velocity;
+
+            //delete bullet that go off-screen
+            if (!Game1.Viewport.Bounds.Contains(Position.ToPoint()))
+            {
+                IsExpired = true;
+            }
         }
     }
 }

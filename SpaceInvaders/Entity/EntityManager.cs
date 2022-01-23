@@ -109,6 +109,7 @@ namespace SpaceInvaders.Entity
         private void KillPlayer()
         {
             PlayerShip.Instance.Kill();
+            //killing all enemies
             enemies.ForEach(x => x.WasShot());
             //blackHoles.ForEach(x => x.Kill());
             //level reset

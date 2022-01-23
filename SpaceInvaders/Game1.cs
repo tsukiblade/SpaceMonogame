@@ -12,10 +12,13 @@ namespace SpaceInvaders
         public static Game1 Instance { get; private set; }
         public static Viewport Viewport { get { return Instance.GraphicsDevice.Viewport; } }
         public static Vector2 ScreenSize { get { return new Vector2(Viewport.Width, Viewport.Height); } }
+        public static GameTime GameTime { get; private set; }
 
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
         private EntityManager _entityManager;
+
+        public ICommand FireCommand { get; set; }
 
         public Game1()
         {
@@ -26,12 +29,14 @@ namespace SpaceInvaders
             _graphics.PreferredBackBufferHeight = 1080;
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
+
+            FireCommand = new FireCommand(_entityManager);
         }
 
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-
+            IsMouseVisible = false;
             base.Initialize();
         }
 
@@ -48,11 +53,19 @@ namespace SpaceInvaders
 
         protected override void Update(GameTime gameTime)
         {
+            GameTime = gameTime;
+            Input.Update();
+
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
             if (Input.WasKeyPressed(Keys.P))
                 _paused = !_paused;
+
+            if (Input.WasFireKeyPressed())
+            {
+                FireCommand.Execute(); //execute command
+            }
 
             if (!_paused)
             {
@@ -76,6 +89,10 @@ namespace SpaceInvaders
             _spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Additive);
             DrawTitleSafeAlignedString("Lives: " + PlayerContext.Instance.Lives, 5);
             DrawTitleSafeRightAlignedString("Score: " + PlayerContext.Instance.Score, 5);
+            if (_paused)
+            {
+                DrawTitleSafeCenterAlignedString("Paused", (int)(Game1.ScreenSize.Y/2));
+            }
 
             _spriteBatch.Draw(Art.Pointer, Input.MousePosition, Color.White);
 
@@ -106,6 +123,13 @@ namespace SpaceInvaders
         {
             var textWidth = Art.Font.MeasureString(text).X;
             _spriteBatch.DrawString(Art.Font, text, new Vector2(ScreenSize.X - textWidth - 5 - Viewport.TitleSafeArea.X, Viewport.TitleSafeArea.Y + y), Color.White);
+        }
+
+        private void DrawTitleSafeCenterAlignedString(string text, float y)
+        {
+            var textWidth = Art.Font.MeasureString(text).X;
+            var textHeight = Art.Font.MeasureString(text).Y;
+            _spriteBatch.DrawString(Art.Font, text, new Vector2(ScreenSize.X/2 - textWidth - 5 - Viewport.TitleSafeArea.X, ScreenSize.Y/2 - textHeight - Viewport.TitleSafeArea.Y + y), Color.White);
         }
     }
 }

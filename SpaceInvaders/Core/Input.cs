@@ -49,8 +49,7 @@ namespace SpaceInvaders.Core
 
 		public static Vector2 GetMovementDirection()
 		{
-
-			Vector2 direction = _gamepadState.ThumbSticks.Left;
+            Vector2 direction = _gamepadState.ThumbSticks.Left;
 			direction.Y *= -1;  // invert the y-axis
 
 			if (_keyboardState.IsKeyDown(Keys.A))
@@ -67,6 +66,22 @@ namespace SpaceInvaders.Core
 				direction.Normalize();
 
 			return direction;
+		}
+
+        public static Vector2 GetMovementInput()
+        {
+            Vector2 direction = _gamepadState.ThumbSticks.Left;
+			direction.Y *= -1;  // invert the y-axis
+			if (_keyboardState.IsKeyDown(Keys.A))
+                direction.X -= 1;
+            if (_keyboardState.IsKeyDown(Keys.D))
+                direction.X += 1;
+
+            // Clamp the length of the vector to a maximum of 1.
+            if (direction.LengthSquared() > 1)
+                direction.Normalize();
+
+            return direction;
 		}
 
 		public static Vector2 GetAimDirection()
