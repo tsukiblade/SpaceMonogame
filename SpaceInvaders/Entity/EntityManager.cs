@@ -12,6 +12,7 @@ namespace SpaceInvaders.Entity
         private List<Entity> entities = new List<Entity>();
         private List<Enemy> enemies = new List<Enemy>();
         private List<Bullet> bullets = new List<Bullet>();
+        private List<Obstacle> obstacles = new List<Obstacle>();
         private List<Entity> addedEntities = new List<Entity>();
 
         public bool IsUpdating { get; set; }
@@ -35,6 +36,9 @@ namespace SpaceInvaders.Entity
                 case Enemy enemy:
                     enemies.Add(enemy);
                     break;
+                case Obstacle obstacle:
+                    obstacles.Add(obstacle);
+                    break;
             }
         }
 
@@ -57,6 +61,7 @@ namespace SpaceInvaders.Entity
             entities = entities.Where(x => !x.IsExpired).ToList();
             bullets = bullets.Where(x => !x.IsExpired).ToList();
             enemies = enemies.Where(x => !x.IsExpired).ToList();
+            obstacles = obstacles.Where(x => !x.IsExpired).ToList();
         }
 
         private void HandleCollisions()
@@ -81,10 +86,7 @@ namespace SpaceInvaders.Entity
                 {
                     if (IsColliding(enemies[i], bullets[j]))
                     {
-                        //enemies[i].WasShot();
-                        //bullets[j].IsExpired = true;
                         enemies[i].HandleCollision(bullets[j]);
-                        enemies[j].HandleCollision(bullets[i]);
                     }
                 }
             }
@@ -95,7 +97,26 @@ namespace SpaceInvaders.Entity
                 if (enemies[i].IsActive && IsColliding(PlayerShip.Instance, enemies[i]))
                 {
                     KillPlayer();
+                    enemies[i].IsExpired = true; //delete the enemy
                     break;
+                }
+            }
+
+            // handle collisions between the obstacles and bullets
+            for (int i = 0; i < obstacles.Count; i++)
+            {
+                for (int j = 0; j < bullets.Count; j++)
+                {
+                    if (IsColliding(obstacles[i], bullets[j]))
+                    {
+                        obstacles[i].HandleCollision(bullets[j]);
+                    }
+                }
+
+                //handle collision obstacle with player
+                if (IsColliding(PlayerShip.Instance, obstacles[i]))
+                {
+                    obstacles[i].HandleCollision(PlayerShip.Instance);
                 }
             }
         }

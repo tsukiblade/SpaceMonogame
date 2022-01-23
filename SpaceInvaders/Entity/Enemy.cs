@@ -9,9 +9,10 @@ namespace SpaceInvaders.Entity
 {
     public abstract class Enemy : Entity
     {
-        private int _baseHp = 2;
+        protected readonly int BaseHealthPoints = 2;
+        protected int DamageTaken;
         private int _timeUntilStart = 60;
-        public bool IsActive { get { return _timeUntilStart <= 0; } }
+        public bool IsActive => _timeUntilStart <= 0;
         private IEnemyMovementStrategy _enemyMovementStrategy;
 
         public int PointValue { get; private set; }
@@ -20,13 +21,12 @@ namespace SpaceInvaders.Entity
         {
         }
 
-        protected Enemy(IEnemyMovementStrategy enemyMovementStrategy, EntityState state = null)
+        protected Enemy(Texture2D image, Vector2 position)
         {
-            _enemyMovementStrategy = enemyMovementStrategy;
-            if (!(state is null))
-            {
-                TransitionToState(state);
-            }
+            Image = image;
+            Position = position;
+
+            _enemyMovementStrategy = new StandardEnemyMovementStrategy();
         }
 
         public void SetStrategy(IEnemyMovementStrategy enemyMovementStrategy)
@@ -80,25 +80,37 @@ namespace SpaceInvaders.Entity
     /*concrete enemies*/
     public class EnemyShip : Enemy
     {
-        protected int _baseHealthPoints = 2;
-        private int _actualHealthPoints;
-
-        public EnemyShip(IEnemyMovementStrategy enemyMovementStrategy, EntityState state = null) : base(enemyMovementStrategy, state)
+        public EnemyShip(Vector2 position) : base(Art.Bullet, position)
         {
-            _actualHealthPoints = _baseHealthPoints;
         }
 
         public override int GetHealthPoints()
         {
-            return _actualHealthPoints;
+            return BaseHealthPoints - DamageTaken;
         }
 
         public override void RemoveHealthPoints(int amount)
         {
-            --_baseHealthPoints;
+            DamageTaken++;
         }
     }
 
+    public class EnemyAlien : Enemy
+    {
+        public EnemyAlien(Vector2 position) : base(Art.Bullet, position)
+        {
+        }
+
+        public override int GetHealthPoints()
+        {
+            return BaseHealthPoints - DamageTaken;
+        }
+
+        public override void RemoveHealthPoints(int amount)
+        {
+            DamageTaken++;
+        }
+    }
 
     /*decorators*/
 
@@ -114,6 +126,60 @@ namespace SpaceInvaders.Entity
         public void SetEnemy(Enemy enemy)
         {
             _enemy = enemy;
+        }
+
+        public override int GetHealthPoints()
+        {
+            if (_enemy is null)
+            {
+                throw new NullReferenceException(nameof(_enemy));
+            }
+
+            return _enemy.GetHealthPoints();
+        }
+
+        public override void RemoveHealthPoints(int amount)
+        {
+            if (_enemy is null)
+            {
+                throw new NullReferenceException(nameof(_enemy));
+            }
+
+            _enemy.RemoveHealthPoints(amount);
+        }
+    }
+
+    public class WeakEnemyDecorator : EnemyDecorator
+    {
+        public WeakEnemyDecorator(Enemy enemy) : base(enemy)
+        {
+        }
+
+        public override int GetHealthPoints()
+        {
+            return BaseHealthPoints - 1 - DamageTaken;
+        }
+
+        public override void RemoveHealthPoints(int amount)
+        {
+            base.RemoveHealthPoints(amount);
+        }
+    }
+
+    public class StrongEnemyDecorator : EnemyDecorator
+    {
+        public StrongEnemyDecorator(Enemy enemy) : base(enemy)
+        {
+        }
+
+        public override int GetHealthPoints()
+        {
+            return BaseHealthPoints + 5 - DamageTaken;
+        }
+
+        public override void RemoveHealthPoints(int amount)
+        {
+            base.RemoveHealthPoints(amount);
         }
     }
 }

@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using SpaceInvaders.Core;
@@ -104,7 +102,7 @@ namespace SpaceInvaders.Entity
         {
             if (_bullet is null)
             {
-                return 0;
+                throw new NullReferenceException(nameof(_bullet));
             }
 
             return _bullet.GetDamage();
@@ -127,6 +125,12 @@ namespace SpaceInvaders.Entity
     {
         public RangeBulletDecorator(Bullet bullet) : base(bullet)
         {
+        }
+
+        public override float Radius
+        {
+            get => base.Radius*1.5f;
+            set => base.Radius = value;
         }
         //change radius or sth
     }

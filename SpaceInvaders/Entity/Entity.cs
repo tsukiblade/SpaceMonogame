@@ -28,7 +28,7 @@ namespace SpaceInvaders.Entity
 
         public float Orientation { get; set; }
 
-        public float Radius { get; set; }
+        public virtual float Radius { get; set; }
 
         public bool IsExpired { get; set; } //true if entity was destroyed and should be deleted
 

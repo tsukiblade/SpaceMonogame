@@ -7,19 +7,43 @@ namespace SpaceInvaders.Entity
 {
     public interface IBulletFactory
     {
-        Bullet GetRocket(Vector2 position, Vector2 velocity);
-        Bullet GetDoubleDamageRocket(Vector2 position, Vector2 velocity);
+        Bullet CreateBullet(Vector2 position, Vector2 velocity);
+        Bullet CreateDoubleDamageBullet(Vector2 position, Vector2 velocity);
+        Bullet CreateBigBullet(Vector2 position, Vector2 velocity);
     }
-    public class BulletFactory : IBulletFactory
+    public class RocketFactory : IBulletFactory
     {
-        public Bullet GetRocket(Vector2 position, Vector2 velocity)
+        public Bullet CreateBullet(Vector2 position, Vector2 velocity)
         {
             return new Rocket(position, velocity);
         }
 
-        public Bullet GetDoubleDamageRocket(Vector2 position, Vector2 velocity)
+        public Bullet CreateDoubleDamageBullet(Vector2 position, Vector2 velocity)
         {
             return new DoubleDamageDecorator(new Rocket(position, velocity));
+        }
+
+        public Bullet CreateBigBullet(Vector2 position, Vector2 velocity)
+        {
+            return new RangeBulletDecorator(new Rocket(position, velocity));
+        }
+    }
+
+    public class BombFactory : IBulletFactory
+    {
+        public Bullet CreateBullet(Vector2 position, Vector2 velocity)
+        {
+            return new Bomb(position, velocity);
+        }
+
+        public Bullet CreateDoubleDamageBullet(Vector2 position, Vector2 velocity)
+        {
+            return new DoubleDamageDecorator(new Bomb(position, velocity));
+        }
+
+        public Bullet CreateBigBullet(Vector2 position, Vector2 velocity)
+        {
+            return new RangeBulletDecorator(new Rocket(position, velocity));
         }
     }
 }

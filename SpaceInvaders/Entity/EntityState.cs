@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Text;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework.Graphics;
 
 namespace SpaceInvaders.Entity
 {
@@ -47,8 +43,8 @@ namespace SpaceInvaders.Entity
     {
         public override void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(EntityContext.Image, EntityContext.Position, null, EntityContext.color, EntityContext.Orientation, EntityContext.Size / 2f, 1f, 0, 0);
-            //apply animation
+            if (Game1.GameTime.TotalGameTime.Milliseconds%6 == 0)
+                spriteBatch.Draw(EntityContext.Image, EntityContext.Position, null, EntityContext.color, EntityContext.Orientation, EntityContext.Size / 2f, 1f, 0, 0);
         }
 
         public override void HandleCollision(Entity other)

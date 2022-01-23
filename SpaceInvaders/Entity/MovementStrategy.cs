@@ -47,17 +47,15 @@ namespace SpaceInvaders.Entity
     {
         public void Move(Enemy entity)
         {
-            const float acceleration = 0.9f;
-            while (true)
+            const float acceleration = 0.3f;
+            
+            if (!PlayerShip.Instance.IsDead)
             {
-                if (true /* player is alive*/)
-                {
-                    entity.Velocity += (PlayerShip.Instance.Position - entity.Position).ScaleTo(acceleration);
-                }
-
-                if (entity.Velocity != Vector2.Zero)
-                    entity.Orientation = entity.Velocity.ToAngle();
+                entity.Velocity += (PlayerShip.Instance.Position - entity.Position).ScaleTo(acceleration);
             }
+
+            if (entity.Velocity != Vector2.Zero)
+                entity.Orientation = entity.Velocity.ToAngle();
         }
     }
 }
