@@ -21,10 +21,6 @@ namespace SpaceInvaders.Entity
 
         //some shared methods
 
-        //public abstract void Handle();
-
-        //public abstract void AnotherSharedMethod();
-
         //public abstract void HandleDamage();
 
         public abstract void Draw(SpriteBatch spriteBatch);

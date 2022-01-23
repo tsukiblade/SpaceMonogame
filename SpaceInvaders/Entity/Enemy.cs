@@ -9,15 +9,24 @@ namespace SpaceInvaders.Entity
 {
     public abstract class Enemy : Entity
     {
+        private int _baseHp = 2;
         private int _timeUntilStart = 60;
         public bool IsActive { get { return _timeUntilStart <= 0; } }
         private IEnemyMovementStrategy _enemyMovementStrategy;
 
         public int PointValue { get; private set; }
 
+        public Enemy()
+        {
+        }
+
         protected Enemy(IEnemyMovementStrategy enemyMovementStrategy, EntityState state = null)
         {
             _enemyMovementStrategy = enemyMovementStrategy;
+            if (!(state is null))
+            {
+                TransitionToState(state);
+            }
         }
 
         public void SetStrategy(IEnemyMovementStrategy enemyMovementStrategy)
@@ -43,10 +52,15 @@ namespace SpaceInvaders.Entity
             Velocity *= 0.8f; //todo change that
         }
 
-        public void WasShot()
+        public void WasShot(Bullet bullet)
         {
-            IsExpired = true;
-            PlayerContext.Instance.AddPoints(PointValue);
+            if (GetHealthPoints() <= 0)
+            {
+                IsExpired = true;
+                PlayerContext.Instance.AddPoints(PointValue);
+                return;
+            }
+            RemoveHealthPoints(bullet.GetDamage());
         }
 
         public override void OnCollision(Entity other)
@@ -55,15 +69,51 @@ namespace SpaceInvaders.Entity
             {
                 return;
             }
-            WasShot();
+            WasShot(bullet);
             bullet.IsExpired = true;
+        }
+
+        public abstract int GetHealthPoints();
+        public abstract void RemoveHealthPoints(int amount);
+    }
+
+    /*concrete enemies*/
+    public class EnemyShip : Enemy
+    {
+        protected int _baseHealthPoints = 2;
+        private int _actualHealthPoints;
+
+        public EnemyShip(IEnemyMovementStrategy enemyMovementStrategy, EntityState state = null) : base(enemyMovementStrategy, state)
+        {
+            _actualHealthPoints = _baseHealthPoints;
+        }
+
+        public override int GetHealthPoints()
+        {
+            return _actualHealthPoints;
+        }
+
+        public override void RemoveHealthPoints(int amount)
+        {
+            --_baseHealthPoints;
         }
     }
 
-    public class EnemyDecorator : Enemy
+
+    /*decorators*/
+
+    public abstract class EnemyDecorator : Enemy
     {
-        public EnemyDecorator(IEnemyMovementStrategy enemyMovementStrategy, EntityState state = null) : base(enemyMovementStrategy, state)
+        protected Enemy _enemy;
+
+        public EnemyDecorator(Enemy enemy)
         {
+            _enemy = enemy;
+        }
+
+        public void SetEnemy(Enemy enemy)
+        {
+            _enemy = enemy;
         }
     }
 }

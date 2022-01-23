@@ -56,6 +56,8 @@ namespace SpaceInvaders
             GameTime = gameTime;
             Input.Update();
 
+            /* input controls */
+
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 

@@ -14,6 +14,7 @@ namespace SpaceInvaders.Entity
         private const int CooldownFrames = 6;
         private int _cooldownRemaining = 0;
         private int _framesUntilRespawn = 0;
+        private readonly IBulletFactory _bulletFactory;
 
         static Random rand = new Random();
 
@@ -37,18 +38,20 @@ namespace SpaceInvaders.Entity
             Orientation = new Vector2(0,1).ToAngle();
             Position = new Vector2(Game1.ScreenSize.X/2, Game1.ScreenSize.Y);
             Radius = 10;
+
+            _bulletFactory = new BulletFactory();
         }
 
         public override void Update()
         {
             if (IsDead)
             {
-                if (--_framesUntilRespawn == 0)
+                if (--_framesUntilRespawn <= 0)
                 {
                     if (PlayerContext.Instance.Lives == 0)
                     {
                         PlayerContext.Instance.Reset();
-                        Position = Game1.ScreenSize / 2;
+                        Position = new Vector2(Game1.ScreenSize.X / 2, Game1.ScreenSize.Y);
                     }
                 }
 
@@ -84,7 +87,7 @@ namespace SpaceInvaders.Entity
 
         public Bullet FireBullet()
         {
-            return new Bullet(Art.Bullet, Position, new Vector2(0, -11f));
+            return _bulletFactory.GetRocket(Position, new Vector2(0, -11f));
         }
     }
 }
