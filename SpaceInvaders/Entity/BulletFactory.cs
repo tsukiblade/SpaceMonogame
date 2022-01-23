@@ -20,12 +20,18 @@ namespace SpaceInvaders.Entity
 
         public Bullet CreateDoubleDamageBullet(Vector2 position, Vector2 velocity)
         {
-            return new DoubleDamageDecorator(new Rocket(position, velocity));
+            return new Rocket(position, velocity)
+            {
+                BulletStatistics = new DoubleDamageDecorator(new RocketStatistics())
+            };
         }
 
         public Bullet CreateBigBullet(Vector2 position, Vector2 velocity)
         {
-            return new RangeBulletDecorator(new Rocket(position, velocity));
+            return new Rocket(position, velocity)
+            {
+                BulletStatistics = new RangeBulletDecorator(new RocketStatistics())
+            };
         }
     }
 
@@ -38,12 +44,18 @@ namespace SpaceInvaders.Entity
 
         public Bullet CreateDoubleDamageBullet(Vector2 position, Vector2 velocity)
         {
-            return new DoubleDamageDecorator(new Bomb(position, velocity));
+            return new Bomb(position, velocity)
+            {
+                BulletStatistics = new DoubleDamageDecorator(new BombStatistics())
+            };
         }
 
         public Bullet CreateBigBullet(Vector2 position, Vector2 velocity)
         {
-            return new RangeBulletDecorator(new Rocket(position, velocity));
+            return new Bomb(position, velocity)
+            {
+                BulletStatistics = new RangeBulletDecorator(new BombStatistics())
+            };
         }
     }
 }

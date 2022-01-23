@@ -39,7 +39,7 @@ namespace SpaceInvaders.Entity
             _state.SetEntityContext(this);
         }
 
-        public virtual void HandleCollision(Entity other)
+        public void HandleCollision(Entity other)
         {
             _state.HandleCollision(other);
         }

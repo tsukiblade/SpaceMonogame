@@ -14,6 +14,8 @@ namespace SpaceInvaders.Core
         public static Texture2D Pixel { get; private set; }		// a single white pixel
         public static Texture2D Pointer { get; private set; }
         public static Texture2D Bullet { get; private set; }
+        public static Texture2D Alien { get; private set; }
+        public static Texture2D Ship { get; private set; }
 
         public static void Load(ContentManager content)
         {
@@ -27,6 +29,8 @@ namespace SpaceInvaders.Core
             Font = content.Load<SpriteFont>("Font");
 
             Bullet = content.Load<Texture2D>("Art/Bullet");
+            Alien = content.Load<Texture2D>("Art/Alien");
+            Ship = content.Load<Texture2D>("Art/Ship");
         }
     }
 }

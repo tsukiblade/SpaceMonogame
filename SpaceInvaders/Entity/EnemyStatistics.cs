@@ -88,6 +88,16 @@ namespace SpaceInvaders.Entity
             return _enemy.GetHealthPoints();
         }
 
+        public override int GetValuePoints()
+        {
+            if (_enemy is null)
+            {
+                throw new NullReferenceException(nameof(_enemy));
+            }
+
+            return _enemy.GetValuePoints();
+        }
+
         public override void RemoveHealthPoints(int amount)
         {
             if (_enemy is null)
@@ -112,7 +122,7 @@ namespace SpaceInvaders.Entity
 
         public override int GetValuePoints()
         {
-            return _enemy.GetValuePoints()/2;
+            return base.GetValuePoints()/2;
         }
 
         public override Color GetColor()
@@ -134,7 +144,7 @@ namespace SpaceInvaders.Entity
 
         public override int GetValuePoints()
         {
-            return _enemy.GetValuePoints() * 2;
+            return base.GetValuePoints() * 2;
         }
 
         public override Color GetColor()

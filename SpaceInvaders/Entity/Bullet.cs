@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using SpaceInvaders.Core;
 using SpaceInvaders.Extensions;
@@ -9,6 +8,8 @@ namespace SpaceInvaders.Entity
     public abstract class Bullet : Entity
     {
         protected int _baseDamage = 1;
+
+        public BulletStatisticsBase BulletStatistics { get; set; }
 
         public Bullet()
         {
@@ -47,11 +48,12 @@ namespace SpaceInvaders.Entity
         private const int rocketDamage = 1;
         public Rocket(Vector2 position, Vector2 velocity) : base(Art.Bullet, position, velocity)
         {
+            BulletStatistics = new RocketStatistics();
         }
 
         public override int GetDamage()
         {
-            return _baseDamage;
+            return BulletStatistics.GetDamage();
         }
     }
 
@@ -61,7 +63,7 @@ namespace SpaceInvaders.Entity
         private int _framesToExplode = 50;
         public Bomb(Vector2 position, Vector2 velocity) : base(Art.Bullet, position, velocity * 0.5f)
         {
-            
+            BulletStatistics = new BombStatistics();
         }
 
         public override void Update()
@@ -81,7 +83,7 @@ namespace SpaceInvaders.Entity
 
         public override int GetDamage()
         {
-            return _baseDamage+1;
+            return BulletStatistics.GetDamage();
         }
     }
 
@@ -94,61 +96,7 @@ namespace SpaceInvaders.Entity
 
         public override int GetDamage()
         {
-            return _baseDamage;
+            return BulletStatistics.GetDamage();
         }
-    }
-
-
-    /* decorators */
-
-    public abstract class BulletDecorator : Bullet
-    {
-        protected Bullet _bullet;
-
-        public BulletDecorator(Bullet bullet)
-        {
-            _bullet = bullet;
-        }
-
-        public void SetBullet(Bullet bullet)
-        {
-            _bullet = bullet;
-        }
-
-        public override int GetDamage()
-        {
-            if (_bullet is null)
-            {
-                throw new NullReferenceException(nameof(_bullet));
-            }
-
-            return _bullet.GetDamage();
-        }
-    }
-
-    public class DoubleDamageDecorator : BulletDecorator
-    {
-        public DoubleDamageDecorator(Bullet bullet) : base(bullet)
-        {
-        }
-
-        public override int GetDamage()
-        {
-            return base.GetDamage()*2;
-        }
-    }
-
-    public class RangeBulletDecorator : BulletDecorator
-    {
-        public RangeBulletDecorator(Bullet bullet) : base(bullet)
-        {
-        }
-
-        public override float Radius
-        {
-            get => base.Radius*1.5f;
-            set => base.Radius = value;
-        }
-        //change radius or sth
     }
 }

@@ -80,7 +80,7 @@ namespace SpaceInvaders.Entity
     /*concrete enemies*/
     public class EnemyShip : Enemy
     {
-        public EnemyShip(Vector2 position) : base(Art.Bullet, position)
+        public EnemyShip(Vector2 position) : base(Art.Ship, position)
         {
             Statistics = new EnemyShipStatistics();
         }
@@ -88,7 +88,7 @@ namespace SpaceInvaders.Entity
 
     public class EnemyAlien : Enemy
     {
-        public EnemyAlien(Vector2 position) : base(Art.Bullet, position)
+        public EnemyAlien(Vector2 position) : base(Art.Alien, position)
         {
             Statistics = new EnemyAlienStatistics();
         }

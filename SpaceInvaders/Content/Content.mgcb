@@ -95,7 +95,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Art/Seeker.png
+/build:Art/Seeker.png;Art/Ship.png
 
 #begin Art/Wanderer.png
 /importer:TextureImporter
@@ -107,7 +107,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Art/Wanderer.png
+/build:Art/Wanderer.png;Art/Alien.png
 
 #begin Font.spritefont
 /importer:FontDescriptionImporter
