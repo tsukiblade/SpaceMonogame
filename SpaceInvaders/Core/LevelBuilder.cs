@@ -6,11 +6,24 @@ using SpaceInvaders.Entity;
 
 namespace SpaceInvaders.Core
 {
+    public enum ObjectType
+    {
+        Ship = 1,
+        Alien,
+        Obstacle
+    }
+
+    public enum DifficultyType
+    {
+        Standard =1,
+        Weak,
+        Strong
+    }
+
     public interface ILevelBuilder
     {
-        void BuildEnemyAlien(Vector2 position);
-        void BuildEnemyShip(Vector2 position);
-
+        void BuildShip(Vector2 position, DifficultyType difficultyType);
+        void BuildAlien(Vector2 position, DifficultyType difficultyType);
         void BuildObstacle(Vector2 position);
 
         GameLevel GetCompleteLevel();
@@ -30,18 +43,29 @@ namespace SpaceInvaders.Core
             _obstacleFactory = new ObstacleFactory();
         }
 
-        public void BuildEnemyAlien(Vector2 position)
+        public void BuildShip(Vector2 position, DifficultyType difficultyType)
         {
-            var alien = _alienEnemyFactory.CreateEnemy(position);
-            _entities.Add(alien);
+            var entity =  difficultyType switch
+            {
+                DifficultyType.Standard => _enemyShipFactory.CreateEnemy(position),
+                DifficultyType.Weak => _enemyShipFactory.CreateWeakEnemy(position),
+                DifficultyType.Strong => _enemyShipFactory.CreateStrongEnemy(position),
+                _ => throw new ArgumentOutOfRangeException(nameof(difficultyType))
+            };
+            _entities.Add(entity);
         }
 
-        public void BuildEnemyShip(Vector2 position)
+        public void BuildAlien(Vector2 position, DifficultyType difficultyType)
         {
-            var ship = _enemyShipFactory.CreateEnemy(position);
-            _entities.Add(ship);
+            var entity = difficultyType switch
+            {
+                DifficultyType.Standard => _alienEnemyFactory.CreateEnemy(position),
+                DifficultyType.Weak => _alienEnemyFactory.CreateWeakEnemy(position),
+                DifficultyType.Strong => _alienEnemyFactory.CreateStrongEnemy(position),
+                _ => throw new ArgumentOutOfRangeException(nameof(difficultyType))
+            };
+            _entities.Add(entity);
         }
-
         public void BuildObstacle(Vector2 position)
         {
             var entity = _obstacleFactory.CreateObstacle(position);

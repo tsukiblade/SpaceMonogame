@@ -6,6 +6,7 @@ namespace SpaceInvaders.Core
 {
     public class GameManager : IGameManager
     {
+        private readonly LevelDirector _levelDirector;
         public int CurrentLevel { get; set; }
         public static List<ScoreData> ScoreData { get; set; }
 
@@ -14,6 +15,7 @@ namespace SpaceInvaders.Core
 
         public GameManager()
         {
+            _levelDirector = new LevelDirector();
             ScoreData = new List<ScoreData>();
             CurrentLevel = 0;
         }
@@ -61,6 +63,14 @@ namespace SpaceInvaders.Core
             {
                 Console.WriteLine(data.Score);
             }
+        }
+
+        public List<Entity.Entity> LoadGameLevel(string fileName)
+        {
+            _levelDirector.Builder = new LevelBuilder();
+            var gameLevel = _levelDirector.ConstructLevel(fileName);
+
+            return gameLevel.Entities;
         }
     }
 }

@@ -42,13 +42,19 @@ namespace SpaceInvaders
 
         protected override void LoadContent()
         {
+            // TODO: use this.Content to load your game content here
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             Art.Load(Content);
             Sound.Load(Content);
 
             _entityManager.Add(PlayerShip.Instance);
             //load game level here
-            // TODO: use this.Content to load your game content here
+
+            foreach (var entity in GameManager.Instance.LoadGameLevel("xxx"))
+            {
+                //loading every entity from game level
+                _entityManager.Add(entity);
+            }
         }
 
         protected override void Update(GameTime gameTime)

@@ -8,22 +8,25 @@ namespace SpaceInvaders.Core
     {
         private ILevelBuilder _builder;
 
-        //public ILevelBuilder Builder
-        //{
-        //    set => _builder;
-        //}
-
-        public GameLevel GetCompleteLevel()
+        public ILevelBuilder Builder
         {
-            return null;
+            set => _builder = value;
         }
 
-        public GameLevel ConstructLevel()
+        public LevelDirector()
+        {
+        }
+
+        public GameLevel ConstructLevel(string fileName)
         {
 
             //deserializacja pliku
             //uzycie metod buildera krok po kroku
-            return null;
+            //foreach (var VARIABLE in fileName)
+            //{
+            //    _builder.BuildEnemyAlien();
+            //}
+            return _builder.GetCompleteLevel();
         }
     }
 }
