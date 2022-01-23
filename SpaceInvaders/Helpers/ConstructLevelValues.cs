@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text;
 
 namespace SpaceInvaders.Helpers
@@ -35,8 +36,8 @@ namespace SpaceInvaders.Helpers
                 obj.DiffType = Convert.ToInt32(span[(indexD + 1)..].ToString());
             }
 
-            obj.X = float.Parse(span[(indexX + 1)..indexY].ToString());
-            obj.Y = float.Parse(span[(indexY + 1)..indexT].ToString());
+            obj.X = float.Parse(span[(indexX + 1)..indexY].ToString(), CultureInfo.InvariantCulture.NumberFormat);
+            obj.Y = float.Parse(span[(indexY + 1)..indexT].ToString(), CultureInfo.InvariantCulture.NumberFormat);
             obj.ObjType = Convert.ToInt32(span[(indexT + 1)..indexD].ToString());
 
             return obj;

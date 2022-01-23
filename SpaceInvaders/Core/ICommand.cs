@@ -28,6 +28,10 @@ namespace SpaceInvaders.Core
 
         public void Execute()
         {
+            if (PlayerShip.Instance.IsDead)
+            {
+                return;
+            }
             var bullet = PlayerShip.Instance.FireBullet();
             _entityManager.Add(bullet);
         }

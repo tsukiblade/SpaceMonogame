@@ -8,11 +8,13 @@ namespace SpaceInvaders.Entity
 {
     public abstract class EnemyStatistics
     {
-        protected readonly int BaseHealthPoints = 2;
-        protected int DamageTaken;
+        public int BaseHealthPoints = 2;
+        public int DamageTaken;
 
         public abstract int GetHealthPoints();
         public abstract void RemoveHealthPoints(int amount);
+
+        public abstract int GetValuePoints();
 
         public abstract Color GetColor();
     }
@@ -27,6 +29,11 @@ namespace SpaceInvaders.Entity
         public override void RemoveHealthPoints(int amount)
         {
             DamageTaken++;
+        }
+
+        public override int GetValuePoints()
+        {
+            return 4;
         }
 
         public override Color GetColor()
@@ -44,6 +51,11 @@ namespace SpaceInvaders.Entity
         public override void RemoveHealthPoints(int amount)
         {
             DamageTaken++;
+        }
+
+        public override int GetValuePoints()
+        {
+            return 2;
         }
 
         public override Color GetColor()
@@ -95,7 +107,12 @@ namespace SpaceInvaders.Entity
 
         public override int GetHealthPoints()
         {
-            return BaseHealthPoints - 1 - DamageTaken;
+            return _enemy.BaseHealthPoints - 1 - _enemy.DamageTaken;
+        }
+
+        public override int GetValuePoints()
+        {
+            return _enemy.GetValuePoints()/2;
         }
 
         public override Color GetColor()
@@ -112,7 +129,12 @@ namespace SpaceInvaders.Entity
 
         public override int GetHealthPoints()
         {
-            return BaseHealthPoints + 5 - DamageTaken;
+            return _enemy.BaseHealthPoints + 5 - _enemy.DamageTaken;
+        }
+
+        public override int GetValuePoints()
+        {
+            return _enemy.GetValuePoints() * 2;
         }
 
         public override Color GetColor()

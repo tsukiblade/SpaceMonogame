@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using SpaceInvaders.Core;
-using SpaceInvaders.Helpers;
 
 namespace SpaceInvaders.Entity
 {
@@ -26,7 +22,7 @@ namespace SpaceInvaders.Entity
             Image = image;
             Position = position;
 
-            _enemyMovementStrategy = new StandardEnemyMovementStrategy();
+            _enemyMovementStrategy = new FollowPlayerStrategy();
         }
 
         public void SetStrategy(IEnemyMovementStrategy enemyMovementStrategy)
@@ -43,7 +39,6 @@ namespace SpaceInvaders.Entity
             else
             {
                 _timeUntilStart--;
-                //not active display sprite or sth change color
             }
 
             Position += Velocity;
@@ -57,7 +52,7 @@ namespace SpaceInvaders.Entity
             if (Statistics.GetHealthPoints() <= 0)
             {
                 IsExpired = true;
-                PlayerContext.Instance.AddPoints(PointValue);
+                PlayerContext.Instance.AddPoints(Statistics.GetValuePoints());
                 return;
             }
 
