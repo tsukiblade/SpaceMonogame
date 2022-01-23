@@ -15,7 +15,7 @@ namespace SpaceInvaders.Core
 
     public enum DifficultyType
     {
-        Standard =1,
+        Standard = 1,
         Weak,
         Strong
     }

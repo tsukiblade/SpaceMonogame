@@ -4,18 +4,18 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using SpaceInvaders.Core;
+using SpaceInvaders.Helpers;
 
 namespace SpaceInvaders.Entity
 {
     public abstract class Enemy : Entity
     {
-        protected readonly int BaseHealthPoints = 2;
-        protected int DamageTaken;
         private int _timeUntilStart = 60;
         public bool IsActive => _timeUntilStart <= 0;
         private IEnemyMovementStrategy _enemyMovementStrategy;
 
         public int PointValue { get; private set; }
+        public EnemyStatistics Statistics { get; set; }
 
         public Enemy()
         {
@@ -45,7 +45,7 @@ namespace SpaceInvaders.Entity
                 _timeUntilStart--;
                 //not active display sprite or sth change color
             }
-            
+
             Position += Velocity;
             Position = Vector2.Clamp(Position, Size / 2, Game1.ScreenSize - (Size / 2));
 
@@ -54,13 +54,14 @@ namespace SpaceInvaders.Entity
 
         public void WasShot(Bullet bullet)
         {
-            if (GetHealthPoints() <= 0)
+            if (Statistics.GetHealthPoints() <= 0)
             {
                 IsExpired = true;
                 PlayerContext.Instance.AddPoints(PointValue);
                 return;
             }
-            RemoveHealthPoints(bullet.GetDamage());
+
+            Statistics.RemoveHealthPoints(bullet.GetDamage());
         }
 
         public override void OnCollision(Entity other)
@@ -69,12 +70,16 @@ namespace SpaceInvaders.Entity
             {
                 return;
             }
+
             WasShot(bullet);
             bullet.IsExpired = true;
         }
 
-        public abstract int GetHealthPoints();
-        public abstract void RemoveHealthPoints(int amount);
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            Color = Statistics.GetColor();
+            base.Draw(spriteBatch);
+        }
     }
 
     /*concrete enemies*/
@@ -82,16 +87,7 @@ namespace SpaceInvaders.Entity
     {
         public EnemyShip(Vector2 position) : base(Art.Bullet, position)
         {
-        }
-
-        public override int GetHealthPoints()
-        {
-            return BaseHealthPoints - DamageTaken;
-        }
-
-        public override void RemoveHealthPoints(int amount)
-        {
-            DamageTaken++;
+            Statistics = new EnemyShipStatistics();
         }
     }
 
@@ -99,87 +95,7 @@ namespace SpaceInvaders.Entity
     {
         public EnemyAlien(Vector2 position) : base(Art.Bullet, position)
         {
-        }
-
-        public override int GetHealthPoints()
-        {
-            return BaseHealthPoints - DamageTaken;
-        }
-
-        public override void RemoveHealthPoints(int amount)
-        {
-            DamageTaken++;
-        }
-    }
-
-    /*decorators*/
-
-    public abstract class EnemyDecorator : Enemy
-    {
-        protected Enemy _enemy;
-
-        public EnemyDecorator(Enemy enemy)
-        {
-            _enemy = enemy;
-        }
-
-        public void SetEnemy(Enemy enemy)
-        {
-            _enemy = enemy;
-        }
-
-        public override int GetHealthPoints()
-        {
-            if (_enemy is null)
-            {
-                throw new NullReferenceException(nameof(_enemy));
-            }
-
-            return _enemy.GetHealthPoints();
-        }
-
-        public override void RemoveHealthPoints(int amount)
-        {
-            if (_enemy is null)
-            {
-                throw new NullReferenceException(nameof(_enemy));
-            }
-
-            _enemy.RemoveHealthPoints(amount);
-        }
-    }
-
-    public class WeakEnemyDecorator : EnemyDecorator
-    {
-        public WeakEnemyDecorator(Enemy enemy) : base(enemy)
-        {
-        }
-
-        public override int GetHealthPoints()
-        {
-            return BaseHealthPoints - 1 - DamageTaken;
-        }
-
-        public override void RemoveHealthPoints(int amount)
-        {
-            base.RemoveHealthPoints(amount);
-        }
-    }
-
-    public class StrongEnemyDecorator : EnemyDecorator
-    {
-        public StrongEnemyDecorator(Enemy enemy) : base(enemy)
-        {
-        }
-
-        public override int GetHealthPoints()
-        {
-            return BaseHealthPoints + 5 - DamageTaken;
-        }
-
-        public override void RemoveHealthPoints(int amount)
-        {
-            base.RemoveHealthPoints(amount);
+            Statistics = new EnemyAlienStatistics();
         }
     }
 }

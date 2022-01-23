@@ -18,7 +18,10 @@ namespace SpaceInvaders
         private SpriteBatch _spriteBatch;
         private EntityManager _entityManager;
 
-        public ICommand FireCommand { get; set; }
+        public ICommand FireCommand { get; }
+        public ICommand<WeaponType> ChangeWeaponCommand { get; }
+
+        private IEnemyFactory _enemyFactory = new EnemyShipFactory();
 
         public Game1()
         {
@@ -31,6 +34,7 @@ namespace SpaceInvaders
             IsMouseVisible = true;
 
             FireCommand = new FireCommand(_entityManager);
+            ChangeWeaponCommand = new ChangeWeaponCommand();
         }
 
         protected override void Initialize()
@@ -55,6 +59,10 @@ namespace SpaceInvaders
                 //loading every entity from game level
                 _entityManager.Add(entity);
             }
+
+            var enemy = _enemyFactory.CreateWeakEnemy(ScreenSize / 2);
+            enemy.SetStrategy(new FollowPlayerStrategy());
+            _entityManager.Add(enemy);
         }
 
         protected override void Update(GameTime gameTime)
@@ -73,6 +81,16 @@ namespace SpaceInvaders
             if (Input.WasFireKeyPressed())
             {
                 FireCommand.Execute(); //execute command
+            }
+
+            if (Input.WasRocketKeyPressed())
+            {
+                ChangeWeaponCommand.Execute(WeaponType.Rocket);
+            }
+
+            if (Input.WasBombKeyPressed())
+            {
+                ChangeWeaponCommand.Execute(WeaponType.Bomb);
             }
 
             if (!_paused)
@@ -96,6 +114,7 @@ namespace SpaceInvaders
             //draw ui here
             _spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Additive);
             DrawTitleSafeAlignedString("Lives: " + PlayerContext.Instance.Lives, 5);
+            DrawTitleSafeAlignedString("Weapon: " + PlayerShip.Instance.CurrentWeapon, 15);
             DrawTitleSafeRightAlignedString("Score: " + PlayerContext.Instance.Score, 5);
             if (_paused)
             {

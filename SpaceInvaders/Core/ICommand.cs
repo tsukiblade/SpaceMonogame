@@ -11,6 +11,12 @@ namespace SpaceInvaders.Core
         void Execute();
     }
 
+    public interface ICommand<T>
+    where T : Enum
+    {
+        void Execute(T type);
+    }
+
     public class FireCommand : ICommand
     {
         private readonly EntityManager _entityManager;
@@ -24,6 +30,14 @@ namespace SpaceInvaders.Core
         {
             var bullet = PlayerShip.Instance.FireBullet();
             _entityManager.Add(bullet);
+        }
+    }
+
+    public class ChangeWeaponCommand : ICommand<WeaponType>
+    {
+        public void Execute(WeaponType type)
+        {
+            PlayerShip.Instance.ChangeWeapon(type);
         }
     }
 

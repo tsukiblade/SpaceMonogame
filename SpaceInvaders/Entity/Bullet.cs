@@ -58,13 +58,30 @@ namespace SpaceInvaders.Entity
     public class Bomb : Bullet
     {
         private const int bombDamage = 2;
-        public Bomb(Vector2 position, Vector2 velocity) : base(Art.Bullet, position, velocity)
+        private int _framesToExplode = 50;
+        public Bomb(Vector2 position, Vector2 velocity) : base(Art.Bullet, position, velocity * 0.5f)
         {
+            
+        }
+
+        public override void Update()
+        {
+            if (_framesToExplode <= 0)
+            {
+                //explode
+                IsExpired = true;
+            }
+            else
+            {
+                --_framesToExplode;
+            }
+
+            base.Update();
         }
 
         public override int GetDamage()
         {
-            return _baseDamage;
+            return _baseDamage+1;
         }
     }
 

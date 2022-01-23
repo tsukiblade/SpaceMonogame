@@ -21,12 +21,18 @@ namespace SpaceInvaders.Entity
 
         public Enemy CreateStrongEnemy(Vector2 position)
         {
-            return new StrongEnemyDecorator(new EnemyShip(position));
+            return new EnemyShip(position)
+            {
+                Statistics = new StrongEnemyStatisticsDecorator(new EnemyShipStatistics())
+            };
         }
 
         public Enemy CreateWeakEnemy(Vector2 position)
         {
-            return new WeakEnemyDecorator(new EnemyShip(position));
+            return new EnemyShip(position)
+            {
+                Statistics = new WeakEnemyStatisticsDecorator(new EnemyShipStatistics())
+            };
         }
     }
 
@@ -39,12 +45,18 @@ namespace SpaceInvaders.Entity
 
         public Enemy CreateWeakEnemy(Vector2 position)
         {
-            return new StrongEnemyDecorator(new EnemyAlien(position));
+            return new EnemyAlien(position)
+            {
+                Statistics = new WeakEnemyStatisticsDecorator(new EnemyAlienStatistics())
+            };
         }
 
         public Enemy CreateStrongEnemy(Vector2 position)
         {
-            return new WeakEnemyDecorator(new EnemyAlien(position));
+            return new EnemyAlien(position)
+            {
+                Statistics = new StrongEnemyStatisticsDecorator(new EnemyAlienStatistics())
+            };
         }
     }
 }

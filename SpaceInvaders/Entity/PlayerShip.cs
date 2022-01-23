@@ -9,6 +9,11 @@ using SpaceInvaders.Helpers;
 
 namespace SpaceInvaders.Entity
 {
+    public enum WeaponType
+    {
+        Rocket = 1,
+        Bomb
+    }
     public class PlayerShip : Entity
     {
         private const float Speed = 8;
@@ -16,7 +21,7 @@ namespace SpaceInvaders.Entity
         private int _cooldownRemaining = 0;
         private int _framesUntilActive = 0;
         private int _framesUntilRespawn = 0;
-        private readonly IBulletFactory _bulletFactory;
+        private IBulletFactory _bulletFactory;
 
         static Random rand = new Random();
 
@@ -36,6 +41,8 @@ namespace SpaceInvaders.Entity
 
         public bool IsActive => _framesUntilActive <= 0;
 
+        public WeaponType CurrentWeapon { get; set; } = WeaponType.Rocket;
+
         public PlayerShip()
         {
             Image = Art.Player;
@@ -44,6 +51,17 @@ namespace SpaceInvaders.Entity
             Radius = 10;
 
             _bulletFactory = new RocketFactory();
+        }
+
+        public void ChangeWeapon(WeaponType type)
+        {
+            _bulletFactory = type switch
+            {
+                WeaponType.Rocket => new RocketFactory(),
+                WeaponType.Bomb => new BombFactory(),
+                _ => throw new ArgumentOutOfRangeException(nameof(type))
+            };
+            CurrentWeapon = type;
         }
 
         public override void Update()
@@ -73,7 +91,6 @@ namespace SpaceInvaders.Entity
             }
 
             Velocity += Speed * Input.GetMovementDirection();
-            //Velocity += Speed * Input.GetMovementInput();
             Position += Velocity;
             Position = Vector2.Clamp(Position, Size / 2, Game1.ScreenSize - (Size / 2));
 

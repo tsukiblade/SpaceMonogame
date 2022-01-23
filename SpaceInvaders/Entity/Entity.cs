@@ -7,7 +7,7 @@ namespace SpaceInvaders.Entity
     public abstract class Entity
     {
         protected Texture2D _image;
-        public Color color = Color.White;
+        public Color Color { get; set; } = Color.White;
         protected EntityState _state;
 
         public Entity()

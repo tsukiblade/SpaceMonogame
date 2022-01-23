@@ -127,5 +127,14 @@ namespace SpaceInvaders.Core
         {
             return WasKeyPressed(Keys.Space);
         }
+
+        public static bool WasRocketKeyPressed()
+        {
+            return WasKeyPressed(Keys.D1);
+        }
+        public static bool WasBombKeyPressed()
+        {
+            return WasKeyPressed(Keys.D2);
+        }
 	}
 }
