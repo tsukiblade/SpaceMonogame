@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
+using SpaceInvaders.States;
 
 namespace SpaceInvaders.Entity
 {
@@ -43,7 +44,7 @@ namespace SpaceInvaders.Entity
     {
         public override void Draw(SpriteBatch spriteBatch)
         {
-            if (Game1.GameTime.TotalGameTime.Milliseconds%6 == 0)
+            if (GameState.GameTime.TotalGameTime.Milliseconds%6 == 0)
                 spriteBatch.Draw(EntityContext.Image, EntityContext.Position, null, EntityContext.Color, EntityContext.Orientation, EntityContext.Size / 2f, 1f, 0, 0);
         }
 

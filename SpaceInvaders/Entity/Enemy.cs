@@ -61,6 +61,11 @@ namespace SpaceInvaders.Entity
 
         public override void OnCollision(Entity other)
         {
+            if (other is PlayerShip player)
+            {
+                IsExpired = true;
+            }
+
             if (!(other is Bullet bullet))
             {
                 return;

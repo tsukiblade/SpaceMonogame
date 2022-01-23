@@ -96,8 +96,9 @@ namespace SpaceInvaders.Entity
             {
                 if (enemies[i].IsActive && IsColliding(PlayerShip.Instance, enemies[i]))
                 {
-                    KillPlayer();
-                    enemies[i].IsExpired = true; //delete the enemy
+                    PlayerShip.Instance.HandleCollision(enemies[i]);
+                    //KillPlayer();
+                    //enemies[i].IsExpired = true; //delete the enemy
                     break;
                 }
             }

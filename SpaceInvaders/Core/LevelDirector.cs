@@ -23,7 +23,7 @@ namespace SpaceInvaders.Core
         public GameLevel ConstructLevel(string fileName)
         {
             //user fileName or smthing later
-            string filePath = @"C:\Users\szl\Downloads\test.txt";
+            string filePath = @"test.txt";
             IEnumerable<string> fileLines = File.ReadLines(filePath);
             foreach (string line in fileLines)
             {

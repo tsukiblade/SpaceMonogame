@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using SpaceInvaders.Core;
 using SpaceInvaders.Entity;
+using SpaceInvaders.States;
 
 namespace SpaceInvaders
 {
@@ -16,31 +17,37 @@ namespace SpaceInvaders
 
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
-        private EntityManager _entityManager;
+
 
         public ICommand FireCommand { get; }
         public ICommand<WeaponType> ChangeWeaponCommand { get; }
 
-        private IEnemyFactory _enemyFactory = new EnemyShipFactory();
+
+
+        private State _currentState;
+
+        private State _nextState;
+
+        public void ChangeState(State state)
+        {
+          _nextState = state;
+        }
 
         public Game1()
         {
             Instance = this;
             _graphics = new GraphicsDeviceManager(this);
-            _entityManager = new EntityManager();
             _graphics.PreferredBackBufferWidth = 1920;
             _graphics.PreferredBackBufferHeight = 1080;
+            _graphics.ApplyChanges();
             Content.RootDirectory = "Content";
-            IsMouseVisible = true;
 
-            FireCommand = new FireCommand(_entityManager);
-            ChangeWeaponCommand = new ChangeWeaponCommand();
         }
 
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-            IsMouseVisible = false;
+            IsMouseVisible = true;
             base.Initialize();
         }
 
@@ -51,112 +58,42 @@ namespace SpaceInvaders
             Art.Load(Content);
             Sound.Load(Content);
 
-            _entityManager.Add(PlayerShip.Instance);
-            //load game level here
+            _currentState = new MenuState(this, _graphics.GraphicsDevice, Content);
+            
 
-            foreach (var entity in GameManager.Instance.LoadGameLevel("xxx"))
-            {
-                //loading every entity from game level
-                _entityManager.Add(entity);
-            }
-
-            var enemy = _enemyFactory.CreateWeakEnemy(ScreenSize / 2);
-            enemy.SetStrategy(new FollowPlayerStrategy());
-            _entityManager.Add(enemy);
+            //var enemy = _enemyFactory.CreateWeakEnemy(ScreenSize / 2);
+            //enemy.SetStrategy(new FollowPlayerStrategy());
+            //_entityManager.Add(enemy);
         }
 
         protected override void Update(GameTime gameTime)
         {
-            GameTime = gameTime;
-            Input.Update();
+            if (_nextState != null)
+            {
+                _currentState = _nextState;
 
-            /* input controls */
+                _nextState = null;
+            }
+
+            _currentState.Update(gameTime);
 
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-
-            if (Input.WasKeyPressed(Keys.P))
-                _paused = !_paused;
-
-            if (Input.WasFireKeyPressed())
-            {
-                FireCommand.Execute(); //execute command
-            }
-
-            if (Input.WasRocketKeyPressed())
-            {
-                ChangeWeaponCommand.Execute(WeaponType.Rocket);
-            }
-
-            if (Input.WasBombKeyPressed())
-            {
-                ChangeWeaponCommand.Execute(WeaponType.Bomb);
-            }
-
-            if (!_paused)
-            {
-                _entityManager.Update();
-            }
+            //_currentState.PostUpdate(gameTime);
 
             base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
         {
+
             GraphicsDevice.Clear(Color.Black);
 
-            _spriteBatch.Begin(SpriteSortMode.Texture, BlendState.Additive);
-            _entityManager.Draw(_spriteBatch);
-            _spriteBatch.End();
+            _currentState.Draw(gameTime, _spriteBatch);
 
             base.Draw(gameTime);
-
-            //draw ui here
-            _spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Additive);
-            DrawTitleSafeAlignedString("Lives: " + PlayerContext.Instance.Lives, 5);
-            DrawTitleSafeAlignedString("Weapon: " + PlayerShip.Instance.CurrentWeapon, 15);
-            DrawTitleSafeRightAlignedString("Score: " + PlayerContext.Instance.Score, 5);
-            if (_paused)
-            {
-                DrawTitleSafeCenterAlignedString("Paused", (int)(Game1.ScreenSize.Y/2));
-            }
-
-            _spriteBatch.Draw(Art.Pointer, Input.MousePosition, Color.White);
-
-            if (PlayerContext.Instance.IsGameOver)
-            {
-                string text = "Game Over\n" +
-                              "Your Score: " + PlayerContext.Instance.Score + "\n";
-                              //"High Score: " + PlayerStatus.HighScore;
-
-                Vector2 textSize = Art.Font.MeasureString(text);
-                _spriteBatch.DrawString(Art.Font, text, ScreenSize / 2 - textSize / 2, Color.White);
-            }
-            _spriteBatch.End();
         }
 
-        private void DrawRightAlignedString(string text, float y)
-        {
-            var textWidth = Art.Font.MeasureString(text).X;
-            _spriteBatch.DrawString(Art.Font, text, new Vector2(ScreenSize.X - textWidth - 5, y), Color.White);
-        }
-
-        private void DrawTitleSafeAlignedString(string text, int pos)
-        {
-            _spriteBatch.DrawString(Art.Font, text, new Vector2(Viewport.TitleSafeArea.X + pos), Color.White);
-        }
-
-        private void DrawTitleSafeRightAlignedString(string text, float y)
-        {
-            var textWidth = Art.Font.MeasureString(text).X;
-            _spriteBatch.DrawString(Art.Font, text, new Vector2(ScreenSize.X - textWidth - 5 - Viewport.TitleSafeArea.X, Viewport.TitleSafeArea.Y + y), Color.White);
-        }
-
-        private void DrawTitleSafeCenterAlignedString(string text, float y)
-        {
-            var textWidth = Art.Font.MeasureString(text).X;
-            var textHeight = Art.Font.MeasureString(text).Y;
-            _spriteBatch.DrawString(Art.Font, text, new Vector2(ScreenSize.X/2 - textWidth - 5 - Viewport.TitleSafeArea.X, ScreenSize.Y/2 - textHeight - Viewport.TitleSafeArea.Y + y), Color.White);
-        }
+        
     }
 }

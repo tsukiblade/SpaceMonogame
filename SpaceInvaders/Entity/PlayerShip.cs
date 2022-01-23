@@ -111,6 +111,12 @@ namespace SpaceInvaders.Entity
             base.Draw(spriteBatch);
         }
 
+        public override void OnCollision(Entity other)
+        {
+            Kill();
+            other.HandleCollision(this);
+        }
+
         public void Kill()
         {
             PlayerContext.Instance.RemoveLife();
