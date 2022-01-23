@@ -22,6 +22,7 @@ namespace SpaceInvaders.Helpers
             int indexY = span.IndexOf('y');
             int indexT = span.IndexOf('t');
             int indexD = span.IndexOf('d');
+            int indexS = span.IndexOf('s');
             if(indexX == -1 || indexY == -1 || indexT == -1)
             {
                 throw new Exception("Invalid input.");

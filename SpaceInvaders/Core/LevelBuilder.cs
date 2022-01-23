@@ -20,6 +20,12 @@ namespace SpaceInvaders.Core
         Strong
     }
 
+    public enum StrategyType
+    {
+        Follow = 1,
+        Chaotic
+    }
+
     public interface ILevelBuilder
     {
         void BuildShip(Vector2 position, DifficultyType difficultyType);

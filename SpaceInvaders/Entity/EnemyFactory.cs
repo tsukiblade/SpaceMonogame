@@ -40,23 +40,29 @@ namespace SpaceInvaders.Entity
     {
         public Enemy CreateEnemy(Vector2 position)
         {
-            return new EnemyAlien(position);
+            var alien = new EnemyAlien(position);
+            alien.SetStrategy(new ChaoticEnemyMovementStrategy());
+            return alien;
         }
 
         public Enemy CreateWeakEnemy(Vector2 position)
         {
-            return new EnemyAlien(position)
+            var alien = new EnemyAlien(position)
             {
                 Statistics = new WeakEnemyStatisticsDecorator(new EnemyAlienStatistics())
             };
+            alien.SetStrategy(new ChaoticEnemyMovementStrategy());
+            return alien;
         }
 
         public Enemy CreateStrongEnemy(Vector2 position)
         {
-            return new EnemyAlien(position)
+            var alien = new EnemyAlien(position)
             {
                 Statistics = new StrongEnemyStatisticsDecorator(new EnemyAlienStatistics())
             };
+            alien.SetStrategy(new FollowPlayerStrategy());
+            return alien;
         }
     }
 }
