@@ -45,10 +45,15 @@ namespace SpaceInvaders.Entity
     /* concrete classes */
     public class Rocket : Bullet
     {
-        private const int rocketDamage = 1;
         public Rocket(Vector2 position, Vector2 velocity) : base(Art.Bullet, position, velocity)
         {
             BulletStatistics = new RocketStatistics();
+        }
+
+        public override void Update()
+        {
+            Radius = BulletStatistics.GetRadius();
+            base.Update();
         }
 
         public override int GetDamage()
@@ -59,16 +64,15 @@ namespace SpaceInvaders.Entity
 
     public class Bomb : Bullet
     {
-        private const int bombDamage = 2;
         private int _framesToExplode = 50;
         public Bomb(Vector2 position, Vector2 velocity) : base(Art.Bomb, position, velocity * 0.5f)
         {
             BulletStatistics = new BombStatistics();
-            Radius = 15;
         }
 
         public override void Update()
         {
+            Radius = BulletStatistics.GetRadius();
             if (_framesToExplode <= 0)
             {
                 //explode
@@ -90,9 +94,15 @@ namespace SpaceInvaders.Entity
 
     public class Laser : Bullet
     {
-        private const int laserDamage = 1;
-        public Laser(Vector2 position, Vector2 velocity) : base(Art.Bullet, position, velocity)
+        public Laser(Vector2 position, Vector2 velocity) : base(Art.Laser, position, velocity)
         {
+            BulletStatistics = new LaserStatistics();
+        }
+
+        public override void Update()
+        {
+            Radius = BulletStatistics.GetRadius();
+            base.Update();
         }
 
         public override int GetDamage()

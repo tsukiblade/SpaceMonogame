@@ -58,4 +58,28 @@ namespace SpaceInvaders.Entity
             };
         }
     }
+
+    public class LaserFactory : IBulletFactory
+    {
+        public Bullet CreateBullet(Vector2 position, Vector2 velocity)
+        {
+            return new Laser(position, velocity);
+        }
+
+        public Bullet CreateDoubleDamageBullet(Vector2 position, Vector2 velocity)
+        {
+            return new Laser(position, velocity)
+            {
+                BulletStatistics = new DoubleDamageDecorator(new LaserStatistics())
+            };
+        }
+
+        public Bullet CreateBigBullet(Vector2 position, Vector2 velocity)
+        {
+            return new Laser(position, velocity)
+            {
+                BulletStatistics = new RangeBulletDecorator(new LaserStatistics())
+            };
+        }
+    }
 }

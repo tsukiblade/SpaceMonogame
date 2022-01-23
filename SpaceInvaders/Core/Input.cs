@@ -136,5 +136,10 @@ namespace SpaceInvaders.Core
         {
             return WasKeyPressed(Keys.D2);
         }
+
+        public static bool WasLaserKeyPressed()
+        {
+            return WasKeyPressed(Keys.D3);
+        }
 	}
 }

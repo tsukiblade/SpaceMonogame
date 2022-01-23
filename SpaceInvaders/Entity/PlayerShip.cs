@@ -12,7 +12,8 @@ namespace SpaceInvaders.Entity
     public enum WeaponType
     {
         Rocket = 1,
-        Bomb
+        Bomb,
+        Laser
     }
     public class PlayerShip : Entity
     {
@@ -59,6 +60,7 @@ namespace SpaceInvaders.Entity
             {
                 WeaponType.Rocket => new RocketFactory(),
                 WeaponType.Bomb => new BombFactory(),
+                WeaponType.Laser => new LaserFactory(),
                 _ => throw new ArgumentOutOfRangeException(nameof(type))
             };
             CurrentWeapon = type;

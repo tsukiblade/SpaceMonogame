@@ -19,6 +19,19 @@ namespace SpaceInvaders.Entity
 
         public override float GetRadius()
         {
+            return 5;
+        }
+    }
+
+    public class LaserStatistics : BulletStatisticsBase
+    {
+        public override int GetDamage()
+        {
+            return 1;
+        }
+
+        public override float GetRadius()
+        {
             return 1;
         }
     }
@@ -32,7 +45,7 @@ namespace SpaceInvaders.Entity
 
         public override float GetRadius()
         {
-            return 3;
+            return 15;
         }
     }
 

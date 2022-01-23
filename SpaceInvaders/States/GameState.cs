@@ -95,7 +95,18 @@ namespace SpaceInvaders.States
             {
                 FireCommand.Execute(); //execute command
             }
+            
+            ChangeWeaponType();
+            
 
+            if (!_paused)
+            {
+                _entityManager.Update();
+            }
+        }
+
+        private void ChangeWeaponType()
+        {
             if (Input.WasRocketKeyPressed())
             {
                 ChangeWeaponCommand.Execute(WeaponType.Rocket);
@@ -106,9 +117,9 @@ namespace SpaceInvaders.States
                 ChangeWeaponCommand.Execute(WeaponType.Bomb);
             }
 
-            if (!_paused)
+            if (Input.WasLaserKeyPressed())
             {
-                _entityManager.Update();
+                ChangeWeaponCommand.Execute(WeaponType.Laser);
             }
         }
 

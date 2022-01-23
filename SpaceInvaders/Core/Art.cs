@@ -18,6 +18,7 @@ namespace SpaceInvaders.Core
         public static Texture2D Ship { get; private set; }
         public static Texture2D Button { get; private set; }
         public static Texture2D Bomb { get; private set; }
+        public static Texture2D Laser { get; private set; }
 
         public static void Load(ContentManager content)
         {
@@ -36,6 +37,7 @@ namespace SpaceInvaders.Core
 
             Button = content.Load<Texture2D>("Art/Bullet");
             Bomb = content.Load<Texture2D>("Art/Bomb");
+            Laser = content.Load<Texture2D>("Art/Laser");
         }
     }
 }
