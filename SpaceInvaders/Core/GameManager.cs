@@ -6,16 +6,16 @@ namespace SpaceInvaders.Core
 {
     public class GameManager : IGameManager
     {
-        public int currentLevel { get; set; }
-        public static List<ScoreData> scoreData { get; set; }
+        public int CurrentLevel { get; set; }
+        public static List<ScoreData> ScoreData { get; set; }
 
         private static GameManager _instance;
         private static ICommand _saveCommand;
 
         public GameManager()
         {
-            scoreData = new List<ScoreData>();
-            currentLevel = 0;
+            ScoreData = new List<ScoreData>();
+            CurrentLevel = 0;
         }
 
         public static GameManager Instance
@@ -26,10 +26,10 @@ namespace SpaceInvaders.Core
                 {
                     _instance = new GameManager();
 
-                    if (_saveCommand is null)
-                    {
-                        _saveCommand = new SaveGameCommand(_instance);
-                    }
+                    //if (_saveCommand is null)
+                    //{
+                    //    _saveCommand = new SaveGameCommand(_instance);
+                    //}
                 }
 
 
@@ -38,7 +38,7 @@ namespace SpaceInvaders.Core
         }
         public IGameManagerMemento Save()
         {
-            return new GameManagerMemento(currentLevel, scoreData);
+            return new GameManagerMemento(CurrentLevel, ScoreData);
         }
 
         public void Restore(IGameManagerMemento memento)
@@ -48,8 +48,8 @@ namespace SpaceInvaders.Core
                 throw new Exception("Unknown memento class " + memento.ToString());
             }
 
-            currentLevel = memento.GetLevel();
-            scoreData = memento.GetScoreData();
+            CurrentLevel = memento.GetLevel();
+            ScoreData = memento.GetScoreData();
         }
 
 
@@ -57,7 +57,7 @@ namespace SpaceInvaders.Core
         {
             //throw new NotImplementedException();
             //return _ranking;
-            foreach(var data in scoreData)
+            foreach(var data in ScoreData)
             {
                 Console.WriteLine(data.Score);
             }
