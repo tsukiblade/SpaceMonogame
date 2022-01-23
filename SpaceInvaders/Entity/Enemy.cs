@@ -88,6 +88,7 @@ namespace SpaceInvaders.Entity
         public EnemyShip(Vector2 position) : base(Art.Ship, position)
         {
             Statistics = new EnemyShipStatistics();
+            Radius = 5;
         }
     }
 
@@ -96,6 +97,7 @@ namespace SpaceInvaders.Entity
         public EnemyAlien(Vector2 position) : base(Art.Alien, position)
         {
             Statistics = new EnemyAlienStatistics();
+            Radius = 10;
         }
     }
 }

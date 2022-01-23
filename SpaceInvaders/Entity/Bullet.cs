@@ -61,9 +61,10 @@ namespace SpaceInvaders.Entity
     {
         private const int bombDamage = 2;
         private int _framesToExplode = 50;
-        public Bomb(Vector2 position, Vector2 velocity) : base(Art.Bullet, position, velocity * 0.5f)
+        public Bomb(Vector2 position, Vector2 velocity) : base(Art.Bomb, position, velocity * 0.5f)
         {
             BulletStatistics = new BombStatistics();
+            Radius = 15;
         }
 
         public override void Update()

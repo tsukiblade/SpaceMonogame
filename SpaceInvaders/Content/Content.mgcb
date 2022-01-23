@@ -23,7 +23,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Art/Black Hole.png
+/build:Art/Black Hole.png;Art/Bomb.png
 
 #begin Art/Bullet.png
 /importer:TextureImporter
