@@ -7,7 +7,7 @@ namespace SpaceInvaders.Core
     public class GameManager : IGameManager
     {
         private readonly LevelDirector _levelDirector;
-        public int CurrentLevel { get; set; }
+        public static int CurrentLevel { get; set; }
         public static List<ScoreData> ScoreData { get; set; }
 
         private static GameManager _instance;

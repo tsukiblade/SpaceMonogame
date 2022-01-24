@@ -24,10 +24,10 @@ namespace SpaceInvaders.Core
         {
             //user fileName or smthing later
             string filePath = @"test.txt";
-            IEnumerable<string> fileLines = File.ReadLines(filePath);
+            IEnumerable<string> fileLines = File.ReadLines(fileName);
             foreach (string line in fileLines)
             {
-                var values = ConstructLevelValues.GetValues(line);
+                var values = ConstructLevelHelper.GetValues(line);
                 Vector2 vector; vector.X = values.X; vector.Y = values.Y;
                 switch (values.ObjType)
                 {

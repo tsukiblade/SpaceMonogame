@@ -25,6 +25,11 @@ namespace SpaceInvaders.Entity
                 addedEntities.Add(entity);
         }
 
+        public int GetEnemyCount()
+        {
+            return enemies.Count();
+        }
+
         private void AddEntity(Entity entity)
         {
             entities.Add(entity);

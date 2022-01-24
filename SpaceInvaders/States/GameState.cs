@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using SpaceInvaders.Core;
 using SpaceInvaders.Entity;
+using SpaceInvaders.Helpers;
 
 namespace SpaceInvaders.States
 {
@@ -15,9 +16,10 @@ namespace SpaceInvaders.States
         public static Vector2 ScreenSize => new Vector2(Viewport.Width, Viewport.Height);
         public static GameTime GameTime { get; private set; }
 
+        public static int currentLevel = 0;
         private SpriteBatch _spriteBatch;
         private EntityManager _entityManager;
-
+        private GameManager gameManager;
         public ICommand FireCommand { get; }
         public ICommand<WeaponType> ChangeWeaponCommand { get; }
 
@@ -33,13 +35,14 @@ namespace SpaceInvaders.States
             ChangeWeaponCommand = new ChangeWeaponCommand();
 
             _entityManager.Add(PlayerShip.Instance);
+            gameManager = GameManager.Instance;
             //load game level here
 
-            foreach (var entity in GameManager.Instance.LoadGameLevel("xxx"))
+            /*foreach (var entity in GameManager.Instance.LoadGameLevel("C:\\tt0.txt"))
             {
                 //loading every entity from game level
                 _entityManager.Add(entity);
-            }
+            }*/
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
@@ -102,6 +105,23 @@ namespace SpaceInvaders.States
             if (!_paused)
             {
                 _entityManager.Update();
+            }
+
+            if(_entityManager.GetEnemyCount() == 0)
+            {
+                string nextLevelFilePath = ConstructLevelHelper.GetNextLevelPath();
+                if (nextLevelFilePath != null)
+                {
+                    foreach (var entity in GameManager.Instance.LoadGameLevel(nextLevelFilePath))
+                    {
+                        //loading every entity from game level
+                        _entityManager.Add(entity);
+                    }
+                }
+                else
+                {
+                    //OUT OF LEVELS OR CANT FIND, KICK OUT TO MAIN MENU OR SOMETHING
+                }
             }
         }
 

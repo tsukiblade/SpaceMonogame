@@ -22,6 +22,7 @@ namespace SpaceInvaders.States
             var buttonTexture = Art.Button;
             var buttonFont = Art.Font;
 
+
           var newGameButton = new Button(buttonTexture, buttonFont)
           {
             Position = new Vector2(300, 200),
@@ -55,6 +56,8 @@ namespace SpaceInvaders.States
             loadGameButton,
             quitGameButton,
           };
+
+            
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)

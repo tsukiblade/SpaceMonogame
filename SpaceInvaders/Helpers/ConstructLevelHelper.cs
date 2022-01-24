@@ -1,11 +1,14 @@
-﻿using System;
+﻿using SpaceInvaders.Constants;
+using SpaceInvaders.Core;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Text;
 
 namespace SpaceInvaders.Helpers
 {
-    public static class ConstructLevelValues
+    public static class ConstructLevelHelper
     {
         public class ValueObject
         {
@@ -42,6 +45,22 @@ namespace SpaceInvaders.Helpers
             obj.ObjType = Convert.ToInt32(span[(indexT + 1)..indexD].ToString());
 
             return obj;
+        }
+
+        public static string GetNextLevelPath()
+        {
+            string directory = Paths.LevelsPath;
+            //var gameManager = GameManager.Instance;
+            int currentLevel = GameManager.CurrentLevel++;
+            string suffixExtension = ".txt";
+            string currentLevelFilePath = directory + currentLevel + suffixExtension;
+
+            if (!File.Exists(currentLevelFilePath))
+            {
+                return null;
+            }
+
+            return currentLevelFilePath;
         }
     }
 }
