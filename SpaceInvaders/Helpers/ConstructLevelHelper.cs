@@ -53,7 +53,7 @@ namespace SpaceInvaders.Helpers
             //var gameManager = GameManager.Instance;
             int currentLevel = GameManager.CurrentLevel++;
             string suffixExtension = ".txt";
-            string currentLevelFilePath = directory + currentLevel + suffixExtension;
+            string currentLevelFilePath = Directory.GetCurrentDirectory() + directory + currentLevel + suffixExtension;
 
             if (!File.Exists(currentLevelFilePath))
             {
