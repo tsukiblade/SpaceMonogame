@@ -41,6 +41,10 @@ namespace SpaceInvaders.Core
     {
         public void Execute(WeaponType type)
         {
+            if (PlayerShip.Instance.IsDead || PlayerContext.Instance.IsGameOver)
+            {
+                return;
+            }
             PlayerShip.Instance.ChangeWeapon(type);
         }
     }
