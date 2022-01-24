@@ -112,6 +112,7 @@ namespace SpaceInvaders.States
                 string nextLevelFilePath = ConstructLevelHelper.GetNextLevelPath();
                 if (nextLevelFilePath != null)
                 {
+                    _entityManager.ClearObstacles();
                     foreach (var entity in GameManager.Instance.LoadGameLevel(nextLevelFilePath))
                     {
                         //loading every entity from game level

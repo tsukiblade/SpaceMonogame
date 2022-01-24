@@ -29,6 +29,12 @@ namespace SpaceInvaders.Entity
         {
             return enemies.Count();
         }
+         
+        public void ClearObstacles()
+        {
+
+            entities = entities.Except(entities.OfType<Obstacle>()).ToList();
+        }
 
         private void AddEntity(Entity entity)
         {
