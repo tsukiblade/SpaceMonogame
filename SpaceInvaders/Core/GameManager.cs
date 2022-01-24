@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace SpaceInvaders.Core
@@ -52,6 +53,7 @@ namespace SpaceInvaders.Core
 
             CurrentLevel = memento.GetLevel();
             ScoreData = memento.GetScoreData();
+            PlayerContext.Instance.Score = ScoreData.First().Score;
         }
 
 

@@ -36,6 +36,11 @@ namespace SpaceInvaders.Entity
             entities = entities.Except(entities.OfType<Obstacle>()).ToList();
         }
 
+        public void OnlyPlayerShallRemain()
+        {
+            //
+        }
+
         private void AddEntity(Entity entity)
         {
             entities.Add(entity);

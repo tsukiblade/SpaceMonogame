@@ -47,11 +47,18 @@ namespace SpaceInvaders.Helpers
             return obj;
         }
 
-        public static string GetNextLevelPath()
+        public static string GetNextLevelPath(bool flag = false)
         {
+            //record score and get next level if exists
             string directory = Paths.LevelsPath;
             //var gameManager = GameManager.Instance;
-            int currentLevel = GameManager.CurrentLevel++;
+            ScoreData scoreData = new ScoreData()
+            {
+                Score = PlayerContext.Instance.Score,
+            };
+            GameManager.ScoreData.Add(scoreData);
+            int currentLevel = flag ? GameManager.CurrentLevel : GameManager.CurrentLevel++;
+
             string suffixExtension = ".txt";
             string currentLevelFilePath = Directory.GetCurrentDirectory() + directory + currentLevel + suffixExtension;
 

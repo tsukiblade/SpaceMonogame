@@ -15,7 +15,7 @@ namespace SpaceInvaders.States
         public static Viewport Viewport => Instance.GraphicsDevice.Viewport;
         public static Vector2 ScreenSize => new Vector2(Viewport.Width, Viewport.Height);
         public static GameTime GameTime { get; private set; }
-
+        GameManagerCaretaker caretaker;
         public static int currentLevel = 0;
         private SpriteBatch _spriteBatch;
         private EntityManager _entityManager;
@@ -36,6 +36,7 @@ namespace SpaceInvaders.States
 
             _entityManager.Add(PlayerShip.Instance);
             gameManager = GameManager.Instance;
+            caretaker = new GameManagerCaretaker(gameManager);
             //load game level here
 
             /*foreach (var entity in GameManager.Instance.LoadGameLevel("C:\\tt0.txt"))
@@ -94,6 +95,7 @@ namespace SpaceInvaders.States
             if (Input.WasKeyPressed(Keys.P))
                 _paused = !_paused;
 
+
             if (Input.WasFireKeyPressed())
             {
                 FireCommand.Execute(); //execute command
@@ -106,6 +108,11 @@ namespace SpaceInvaders.States
             {
                 _entityManager.Update();
             }
+            if (Input.WasKeyPressed(Keys.X))
+            {
+                caretaker.Undo();
+                // _entityManager.OnlyPlayerShallRemain();
+            }
 
             if(_entityManager.GetEnemyCount() == 0)
             {
@@ -113,6 +120,7 @@ namespace SpaceInvaders.States
                 if (nextLevelFilePath != null)
                 {
                     _entityManager.ClearObstacles();
+                    caretaker.Backup();
                     foreach (var entity in GameManager.Instance.LoadGameLevel(nextLevelFilePath))
                     {
                         //loading every entity from game level
