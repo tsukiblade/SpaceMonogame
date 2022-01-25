@@ -32,18 +32,10 @@ namespace SpaceInvaders.States
 
           newGameButton.Click += NewGameButton_Click;
 
-          var loadGameButton = new Button(buttonTexture, buttonFont)
-          {
-            Position = new Vector2(300, 250),
-            Text = "Load Game",
-              PenColour = Color.White
-          };
-
-          loadGameButton.Click += LoadGameButton_Click;
 
           var quitGameButton = new Button(buttonTexture, buttonFont)
           {
-            Position = new Vector2(300, 300),
+            Position = new Vector2(300, 250),
             Text = "Quit Game",
             PenColour = Color.White
           };
@@ -53,7 +45,6 @@ namespace SpaceInvaders.States
           _components = new List<Component>()
           {
             newGameButton,
-            loadGameButton,
             quitGameButton,
           };
 
@@ -68,11 +59,6 @@ namespace SpaceInvaders.States
               component.Draw(gameTime, spriteBatch);
 
             spriteBatch.End();
-         }
-
-         private void LoadGameButton_Click(object sender, EventArgs e)
-         {
-           Console.WriteLine("Load Game");
          }
 
          private void NewGameButton_Click(object sender, EventArgs e)
