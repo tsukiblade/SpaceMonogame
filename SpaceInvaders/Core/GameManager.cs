@@ -41,7 +41,8 @@ namespace SpaceInvaders.Core
         }
         public IGameManagerMemento Save()
         {
-            return new GameManagerMemento(CurrentLevel, ScoreData);
+            int prevLevel = CurrentLevel - 1;
+            return new GameManagerMemento(prevLevel, ScoreData);
         }
 
         public void Restore(IGameManagerMemento memento)
@@ -53,7 +54,8 @@ namespace SpaceInvaders.Core
 
             CurrentLevel = memento.GetLevel();
             ScoreData = memento.GetScoreData();
-            PlayerContext.Instance.Score = ScoreData.First().Score;
+            ScoreData.Remove(ScoreData.Last());
+            PlayerContext.Instance.Score = ScoreData.Last().Score;
         }
 
 

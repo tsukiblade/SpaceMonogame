@@ -16,13 +16,13 @@ namespace SpaceInvaders.States
         public static Vector2 ScreenSize => new Vector2(Viewport.Width, Viewport.Height);
         public static GameTime GameTime { get; private set; }
         GameManagerCaretaker caretaker;
-        public static int currentLevel = 0;
+        //public static int currentLevel = 0;
         private SpriteBatch _spriteBatch;
         private EntityManager _entityManager;
         private GameManager gameManager;
         public ICommand FireCommand { get; }
         public ICommand<WeaponType> ChangeWeaponCommand { get; }
-
+        private bool ignore = false;
 
         public GameState(Game1 game, GraphicsDevice graphicsDevice, ContentManager content)
           : base(game, graphicsDevice, content)
@@ -108,29 +108,41 @@ namespace SpaceInvaders.States
             {
                 _entityManager.Update();
             }
+
+            
             if (Input.WasKeyPressed(Keys.X))
             {
                 caretaker.Undo();
-                // _entityManager.OnlyPlayerShallRemain();
+                NextLevel(true);
+                ignore = true;
             }
 
             if(_entityManager.GetEnemyCount() == 0)
             {
-                string nextLevelFilePath = ConstructLevelHelper.GetNextLevelPath();
-                if (nextLevelFilePath != null)
+                // _entityManager.ClearObstacles();
+                if (!ignore)
                 {
-                    _entityManager.ClearObstacles();
-                    caretaker.Backup();
-                    foreach (var entity in GameManager.Instance.LoadGameLevel(nextLevelFilePath))
-                    {
-                        //loading every entity from game level
-                        _entityManager.Add(entity);
-                    }
+                    NextLevel();
                 }
-                else
+                ignore = false;
+            }
+        }
+        private void NextLevel(bool sameLevel = false)
+        {
+            string nextLevelFilePath = ConstructLevelHelper.GetNextLevelPath(sameLevel);
+            if (nextLevelFilePath != null)
+            {
+                _entityManager.DestroyAllExceptPlayer();
+                foreach (var entity in GameManager.Instance.LoadGameLevel(nextLevelFilePath))
                 {
-                    //OUT OF LEVELS OR CANT FIND, KICK OUT TO MAIN MENU OR SOMETHING
+                    //loading every entity from game level
+                    _entityManager.Add(entity);
                 }
+                 caretaker.Backup();
+            }
+            else
+            {
+                //OUT OF LEVELS OR CANT FIND, KICK OUT TO MAIN MENU OR SOMETHING
             }
         }
 
