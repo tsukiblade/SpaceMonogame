@@ -21,6 +21,7 @@ namespace SpaceInvaders.States
         private EntityManager _entityManager;
         private GameManager gameManager;
         public ICommand FireCommand { get; }
+        public ICommand UpgradeWeaponCommand { get; }
         public ICommand<WeaponType> ChangeWeaponCommand { get; }
         private bool ignore = false;
 
@@ -32,6 +33,7 @@ namespace SpaceInvaders.States
             game.IsMouseVisible = false;
             _spriteBatch = new SpriteBatch(graphicsDevice);
             FireCommand = new FireCommand(_entityManager);
+            UpgradeWeaponCommand = new UpgradeWeaponCommand();
             ChangeWeaponCommand = new ChangeWeaponCommand();
 
             _entityManager.Add(PlayerShip.Instance);
@@ -56,8 +58,10 @@ namespace SpaceInvaders.States
 
             //draw ui here
             _spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Additive);
-            DrawTitleSafeAlignedString("Lives: " + PlayerContext.Instance.Lives, 5);
-            DrawTitleSafeAlignedString("Weapon: " + PlayerShip.Instance.CurrentWeapon, 15);
+            DrawTitleSafeAlignedString($"Lives: {PlayerContext.Instance.Lives}\n" +
+                                       $"Weapon: {PlayerShip.Instance.CurrentWeapon}\n" +
+                                       $"Weapon upgrade: {PlayerShip.Instance.WeaponUpgradeLevel}", 5);
+
             DrawTitleSafeRightAlignedString("Score: " + PlayerContext.Instance.Score, 5);
             if (_paused)
             {
@@ -90,11 +94,10 @@ namespace SpaceInvaders.States
 
             /* input controls */
 
-            
-
             if (Input.WasKeyPressed(Keys.P))
+            {
                 _paused = !_paused;
-
+            }
 
             if (Input.WasFireKeyPressed())
             {
@@ -161,6 +164,11 @@ namespace SpaceInvaders.States
             if (Input.WasLaserKeyPressed())
             {
                 ChangeWeaponCommand.Execute(WeaponType.Laser);
+            }
+
+            if (Input.WasUpgradeButtonPressed())
+            {
+                UpgradeWeaponCommand.Execute();
             }
         }
 

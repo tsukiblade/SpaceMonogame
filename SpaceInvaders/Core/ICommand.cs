@@ -37,6 +37,17 @@ namespace SpaceInvaders.Core
         }
     }
 
+    public class UpgradeWeaponCommand : ICommand
+    {
+        public void Execute()
+        {
+            if (PlayerShip.Instance.IsDead || PlayerContext.Instance.IsGameOver)
+            {
+                return;
+            }
+            PlayerShip.Instance.UpgradeWeapon();
+        }
+    }
     public class ChangeWeaponCommand : ICommand<WeaponType>
     {
         public void Execute(WeaponType type)
