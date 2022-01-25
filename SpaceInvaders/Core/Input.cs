@@ -141,5 +141,10 @@ namespace SpaceInvaders.Core
         {
             return WasKeyPressed(Keys.D3);
         }
+
+        public static bool WasUpgradeButtonPressed()
+        {
+            return WasKeyPressed(Keys.T);
+        }
 	}
 }

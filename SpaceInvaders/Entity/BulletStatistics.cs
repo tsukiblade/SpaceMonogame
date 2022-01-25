@@ -8,44 +8,52 @@ namespace SpaceInvaders.Entity
     {
         public abstract int GetDamage();
         public abstract float GetRadius();
+
+        public virtual float GetSpeed() => 1f;
     }
 
     public class RocketStatistics : BulletStatisticsBase
     {
+        private const int baseDamage = 1;
+        private const int baseRadius = 5;
         public override int GetDamage()
         {
-            return 1;
+            return baseDamage;
         }
 
         public override float GetRadius()
         {
-            return 5;
+            return baseRadius;
         }
     }
 
     public class LaserStatistics : BulletStatisticsBase
     {
+        private const int baseDamage = 1;
+        private const int baseRadius = 1;
         public override int GetDamage()
         {
-            return 1;
+            return baseDamage;
         }
 
         public override float GetRadius()
         {
-            return 1;
+            return baseRadius;
         }
     }
 
     public class BombStatistics : BulletStatisticsBase
     {
+        private const int baseDamage = 2;
+        private const int baseRadius = 15;
         public override int GetDamage()
         {
-            return 2;
+            return baseDamage;
         }
 
         public override float GetRadius()
         {
-            return 15;
+            return baseRadius;
         }
     }
 
@@ -84,6 +92,16 @@ namespace SpaceInvaders.Entity
 
             return _bullet.GetRadius();
         }
+
+        public override float GetSpeed()
+        {
+            if (_bullet is null)
+            {
+                throw new NullReferenceException(nameof(_bullet));
+            }
+
+            return _bullet.GetSpeed();
+        }
     }
 
     public class DoubleDamageDecorator : BulletStatisticsDecorator
@@ -107,6 +125,18 @@ namespace SpaceInvaders.Entity
         public override float GetRadius()
         {
             return base.GetRadius() * 1.5f;
+        }
+    }
+
+    public class SpeedBulletDecorator : BulletStatisticsDecorator
+    {
+        public SpeedBulletDecorator(BulletStatisticsBase bullet) : base(bullet)
+        {
+        }
+
+        public override float GetSpeed()
+        {
+            return base.GetSpeed() * 1.5f;
         }
     }
 }

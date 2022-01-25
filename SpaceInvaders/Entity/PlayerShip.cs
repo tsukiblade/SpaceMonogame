@@ -18,6 +18,7 @@ namespace SpaceInvaders.Entity
     public class PlayerShip : Entity
     {
         private const float Speed = 8;
+        private int _bulletUpgradeLevel = 0;
         private const int CooldownFrames = 6;
         private int _cooldownRemaining = 0;
         private int _framesUntilActive = 0;
@@ -54,6 +55,15 @@ namespace SpaceInvaders.Entity
             _bulletFactory = new RocketFactory();
         }
 
+        public void UpgradeWeapon()
+        {
+            if (PlayerContext.Instance.Score < 10) return;
+            _bulletUpgradeLevel++;
+            PlayerContext.Instance.Score-=10;
+        }
+
+        public int WeaponUpgradeLevel => _bulletUpgradeLevel;
+        
         public void ChangeWeapon(WeaponType type)
         {
             _bulletFactory = type switch
@@ -104,15 +114,6 @@ namespace SpaceInvaders.Entity
             Velocity = Vector2.Zero;
         }
 
-        public override void Draw(SpriteBatch spriteBatch)
-        {
-            //if (!IsDead)
-            //{
-            //    base.Draw(spriteBatch);
-            //}
-            base.Draw(spriteBatch);
-        }
-
         public override void OnCollision(Entity other)
         {
             Kill();
@@ -139,7 +140,22 @@ namespace SpaceInvaders.Entity
 
             Vector2 offset = Vector2.Transform(new Vector2(35, 8), aimQuat);
 
-            return _bulletFactory.CreateBullet(Position + offset, vel);
+            return GetBulletAfterUpgrades(Position + offset, vel);
+        }
+
+        private Bullet GetBulletAfterUpgrades(Vector2 position, Vector2 velocity)
+        {
+            var bullet = _bulletFactory.CreateBullet(position, velocity);
+
+            bullet.BulletStatistics = _bulletUpgradeLevel switch
+            {
+                0 => bullet.BulletStatistics,
+                1 => new RangeBulletDecorator(bullet.BulletStatistics),
+                2 => new DoubleDamageDecorator(bullet.BulletStatistics),
+                _ => new DoubleDamageDecorator(new RangeBulletDecorator(bullet.BulletStatistics)),
+            };
+
+            return bullet;
         }
     }
 }
