@@ -34,11 +34,16 @@ namespace SpaceInvaders.Entity
         {
 
             entities = entities.Except(entities.OfType<Obstacle>()).ToList();
+            obstacles.Clear();
         }
 
-        public void OnlyPlayerShallRemain()
+        public void DestroyAllExceptPlayer()
         {
-            //
+            entities = entities.Except(entities.OfType<Obstacle>()).ToList();
+            entities = entities.Except(entities.OfType<Enemy>()).ToList();
+            entities = entities.Except(entities.OfType<Bullet>()).ToList();
+            enemies.Clear();
+            obstacles.Clear();
         }
 
         private void AddEntity(Entity entity)
