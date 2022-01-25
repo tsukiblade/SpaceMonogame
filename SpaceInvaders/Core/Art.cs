@@ -35,7 +35,7 @@ namespace SpaceInvaders.Core
             Alien = content.Load<Texture2D>("Art/Alien");
             Ship = content.Load<Texture2D>("Art/Ship");
 
-            Button = content.Load<Texture2D>("Art/Bullet");
+            Button = content.Load<Texture2D>("Art/Bomb");
             Bomb = content.Load<Texture2D>("Art/Bomb");
             Laser = content.Load<Texture2D>("Art/Laser");
         }
