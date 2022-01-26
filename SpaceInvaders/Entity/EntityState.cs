@@ -7,18 +7,10 @@ namespace SpaceInvaders.Entity
     {
         protected Entity EntityContext;
 
-        /*
-         * By the context we can chagne state within this state
-         */
-
         public void SetEntityContext(Entity entity)
         {
             EntityContext = entity;
         }
-
-        //some shared methods
-
-        //public abstract void HandleDamage();
 
         public abstract void Draw(SpriteBatch spriteBatch);
         

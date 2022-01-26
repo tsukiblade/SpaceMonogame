@@ -34,9 +34,6 @@ namespace SpaceInvaders.Core
 
         public void Reset()
         {
-            //if (Score > HighScore)
-            //SaveHighScore()
-
             Score = 0;
             Lives = 4;
         }
