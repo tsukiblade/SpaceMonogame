@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using SpaceInvaders.Controls;
 using SpaceInvaders.Core;
 using SpaceInvaders.Entity;
 using SpaceInvaders.Helpers;
@@ -25,6 +26,8 @@ namespace SpaceInvaders.States
         public ICommand<WeaponType> ChangeWeaponCommand { get; }
         private bool ignore = false;
 
+        private ComponentComposite uiStringsComposite;
+
         public GameState(Game1 game, GraphicsDevice graphicsDevice, ContentManager content)
           : base(game, graphicsDevice, content)
         {
@@ -35,6 +38,7 @@ namespace SpaceInvaders.States
             FireCommand = new FireCommand(_entityManager);
             UpgradeWeaponCommand = new UpgradeWeaponCommand();
             ChangeWeaponCommand = new ChangeWeaponCommand();
+            uiStringsComposite = new ComponentComposite();
 
             _entityManager.Add(PlayerShip.Instance);
             gameManager = GameManager.Instance;
@@ -46,6 +50,13 @@ namespace SpaceInvaders.States
                 //loading every entity from game level
                 _entityManager.Add(entity);
             }*/
+            Initialize();
+        }
+
+        private void Initialize()
+        {
+            uiStringsComposite.Add(new TitleSafeAlignedString($"UIText", 5));
+            uiStringsComposite.Add(new TitleSafeRightAlignedString("Score text" + PlayerContext.Instance.Score, 5));
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
@@ -58,12 +69,12 @@ namespace SpaceInvaders.States
 
             //draw ui here
             _spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Additive);
-            DrawTitleSafeAlignedString($"Lives: {PlayerContext.Instance.Lives}\n" +
-                                       $"Weapon: {PlayerShip.Instance.CurrentWeapon}\n" +
-                                       $"Weapon upgrade: {PlayerShip.Instance.WeaponUpgradeLevel}\n" +
-                                       $"Level: {GameManager.Instance.CurrentLevel}", 5);
-
-            DrawTitleSafeRightAlignedString("Score: " + PlayerContext.Instance.Score, 5);
+            uiStringsComposite.UpdateSafeAlignedStrings($"Lives: {PlayerContext.Instance.Lives}\n" +
+                                                        $"Weapon: {PlayerShip.Instance.CurrentWeapon}\n" +
+                                                        $"Weapon upgrade: {PlayerShip.Instance.WeaponUpgradeLevel}\n" +
+                                                        $"Level: {GameManager.Instance.CurrentLevel}");
+            uiStringsComposite.UpdateRightAlignedStrings("Score: " + PlayerContext.Instance.Score);
+            uiStringsComposite.Draw(gameTime, _spriteBatch);
             if (_paused)
             {
                 DrawTitleSafeCenterAlignedString("Paused", (int)(Game1.ScreenSize.Y / 2));
@@ -142,7 +153,7 @@ namespace SpaceInvaders.States
                     //loading every entity from game level
                     _entityManager.Add(entity);
                 }
-                 caretaker.Backup();
+                caretaker.Backup();
             }
             else
             {
