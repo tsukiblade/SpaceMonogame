@@ -8,7 +8,7 @@ namespace SpaceInvaders.Core
     public class GameManager : IGameManager
     {
         private readonly LevelDirector _levelDirector;
-        public static int CurrentLevel { get; set; }
+        public int CurrentLevel { get; set; }
         public static List<ScoreData> ScoreData { get; set; }
 
         private static GameManager _instance;
@@ -41,7 +41,7 @@ namespace SpaceInvaders.Core
         }
         public IGameManagerMemento Save()
         {
-            int prevLevel = CurrentLevel - 1;
+            int prevLevel = CurrentLevel - 1 > 0 ? 0 : CurrentLevel -1;
             return new GameManagerMemento(prevLevel, ScoreData);
         }
 

@@ -60,7 +60,8 @@ namespace SpaceInvaders.States
             _spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Additive);
             DrawTitleSafeAlignedString($"Lives: {PlayerContext.Instance.Lives}\n" +
                                        $"Weapon: {PlayerShip.Instance.CurrentWeapon}\n" +
-                                       $"Weapon upgrade: {PlayerShip.Instance.WeaponUpgradeLevel}", 5);
+                                       $"Weapon upgrade: {PlayerShip.Instance.WeaponUpgradeLevel}\n" +
+                                       $"Level: {GameManager.Instance.CurrentLevel}", 5);
 
             DrawTitleSafeRightAlignedString("Score: " + PlayerContext.Instance.Score, 5);
             if (_paused)

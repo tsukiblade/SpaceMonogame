@@ -57,7 +57,7 @@ namespace SpaceInvaders.Helpers
                 Score = PlayerContext.Instance.Score,
             };
             GameManager.ScoreData.Add(scoreData);
-            int currentLevel = sameLevel ? GameManager.CurrentLevel - 1 : GameManager.CurrentLevel++;
+            int currentLevel = sameLevel ? GameManager.Instance.CurrentLevel - 1 : GameManager.Instance.CurrentLevel++;
 
             string suffixExtension = ".txt";
             string currentLevelFilePath = Directory.GetCurrentDirectory() + directory + currentLevel + suffixExtension;
