@@ -25,8 +25,6 @@ namespace SpaceInvaders.Core
             _mouseState = Mouse.GetState();
             _gamepadState = GamePad.GetState(PlayerIndex.One);
 
-            // If the player pressed one of the arrow keys or is using a gamepad to aim, we want to disable mouse aiming. Otherwise,
-            // if the player moves the mouse, enable mouse aiming.
             if (new[] { Keys.Left, Keys.Right, Keys.Up, Keys.Down }.Any(x => _keyboardState.IsKeyDown(x)) ||
                 _gamepadState.ThumbSticks.Right != Vector2.Zero)
                 isAimingWithMouse = false;
@@ -59,7 +57,6 @@ namespace SpaceInvaders.Core
             if (_keyboardState.IsKeyDown(Keys.S))
                 direction.Y += 1;
 
-            // Clamp the length of the vector to a maximum of 1.
             if (direction.LengthSquared() > 1)
                 direction.Normalize();
 
@@ -75,7 +72,6 @@ namespace SpaceInvaders.Core
             if (_keyboardState.IsKeyDown(Keys.D))
                 direction.X += 1;
 
-            // Clamp the length of the vector to a maximum of 1.
             if (direction.LengthSquared() > 1)
                 direction.Normalize();
 

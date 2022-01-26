@@ -40,11 +40,6 @@ namespace SpaceInvaders.States
             caretaker = new GameManagerCaretaker(gameManager);
             //load game level here
 
-            /*foreach (var entity in GameManager.Instance.LoadGameLevel("C:\\tt0.txt"))
-            {
-                //loading every entity from game level
-                _entityManager.Add(entity);
-            }*/
             Initialize();
         }
 

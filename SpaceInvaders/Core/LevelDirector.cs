@@ -15,8 +15,6 @@ namespace SpaceInvaders.Core
 
         public GameLevel ConstructLevel(string fileName)
         {
-            //user fileName or smthing later
-            var filePath = @"test.txt";
             var fileLines = File.ReadLines(fileName);
             foreach (var line in fileLines)
             {

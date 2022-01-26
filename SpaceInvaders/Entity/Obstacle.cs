@@ -13,7 +13,7 @@ namespace SpaceInvaders.Entity
         {
             _image = Art.Obstacle;
             Position = position;
-            Radius = 15; //todo change that
+            Radius = 15; 
         }
 
         public override void Update()

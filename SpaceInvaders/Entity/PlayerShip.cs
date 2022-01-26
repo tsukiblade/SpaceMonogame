@@ -26,7 +26,7 @@ namespace SpaceInvaders.Entity
         private int _framesUntilActive;
         private int _framesUntilRespawn;
 
-        public PlayerShip()
+        private PlayerShip()
         {
             Image = Art.Player;
             Orientation = new Vector2(0, 1).ToAngle();

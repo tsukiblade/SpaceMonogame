@@ -15,7 +15,6 @@ namespace SpaceInvaders.States
         public MenuState(Game1 game, GraphicsDevice graphicsDevice, ContentManager content)
             : base(game, graphicsDevice, content)
         {
-            //ART.BUTTON JEST DO POPRAWY< BO NIE MOGLEM WCZYTAC BUTTON.PNG!!!!!!!!
             var buttonTexture = Art.Button;
             var buttonFont = Art.Font;
 

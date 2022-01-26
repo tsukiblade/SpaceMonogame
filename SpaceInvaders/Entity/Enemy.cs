@@ -41,7 +41,7 @@ namespace SpaceInvaders.Entity
             Position += Velocity;
             Position = Vector2.Clamp(Position, Size / 2, Game1.ScreenSize - Size / 2);
 
-            Velocity *= 0.8f; //todo change that
+            Velocity *= 0.8f; 
         }
 
         public void WasShot(Bullet bullet)

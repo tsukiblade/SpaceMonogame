@@ -10,7 +10,7 @@ namespace SpaceInvaders.Core
         private static ICommand _saveCommand;
         private readonly LevelDirector _levelDirector;
 
-        public GameManager()
+        private GameManager()
         {
             _levelDirector = new LevelDirector();
             ScoreData = new List<ScoreData>();
