@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using SpaceInvaders.Core;
 using SpaceInvaders.Extensions;
 using SpaceInvaders.Helpers;
@@ -15,19 +12,30 @@ namespace SpaceInvaders.Entity
         Bomb,
         Laser
     }
+
     public class PlayerShip : Entity
     {
         private const float Speed = 8;
-        private int _bulletUpgradeLevel = 0;
         private const int CooldownFrames = 6;
-        private int _cooldownRemaining = 0;
-        private int _framesUntilActive = 0;
-        private int _framesUntilRespawn = 0;
-        private IBulletFactory _bulletFactory;
 
-        static Random rand = new Random();
+        private static readonly Random rand = new Random();
 
         private static PlayerShip _instance;
+        private IBulletFactory _bulletFactory;
+        private int _cooldownRemaining = 0;
+        private int _framesUntilActive;
+        private int _framesUntilRespawn;
+
+        public PlayerShip()
+        {
+            Image = Art.Player;
+            Orientation = new Vector2(0, 1).ToAngle();
+            Position = new Vector2(Game1.ScreenSize.X / 2, Game1.ScreenSize.Y);
+            Radius = 10;
+
+            _bulletFactory = new RocketFactory();
+        }
+
         public static PlayerShip Instance
         {
             get
@@ -45,25 +53,15 @@ namespace SpaceInvaders.Entity
 
         public WeaponType CurrentWeapon { get; set; } = WeaponType.Rocket;
 
-        public PlayerShip()
-        {
-            Image = Art.Player;
-            Orientation = new Vector2(0,1).ToAngle();
-            Position = new Vector2(Game1.ScreenSize.X/2, Game1.ScreenSize.Y);
-            Radius = 10;
-
-            _bulletFactory = new RocketFactory();
-        }
+        public int WeaponUpgradeLevel { get; private set; }
 
         public void UpgradeWeapon()
         {
             if (PlayerContext.Instance.Score < 10) return;
-            _bulletUpgradeLevel++;
-            PlayerContext.Instance.Score-=10;
+            WeaponUpgradeLevel++;
+            PlayerContext.Instance.Score -= 10;
         }
 
-        public int WeaponUpgradeLevel => _bulletUpgradeLevel;
-        
         public void ChangeWeapon(WeaponType type)
         {
             _bulletFactory = type switch
@@ -81,13 +79,11 @@ namespace SpaceInvaders.Entity
             if (IsDead)
             {
                 if (--_framesUntilRespawn <= 0)
-                {
                     if (PlayerContext.Instance.Lives == 0)
                     {
                         PlayerContext.Instance.Reset();
                         Position = new Vector2(Game1.ScreenSize.X / 2, Game1.ScreenSize.Y);
                     }
-                }
 
                 return;
             }
@@ -104,12 +100,9 @@ namespace SpaceInvaders.Entity
 
             Velocity += Speed * Input.GetMovementDirection();
             Position += Velocity;
-            Position = Vector2.Clamp(Position, Size / 2, Game1.ScreenSize - (Size / 2));
+            Position = Vector2.Clamp(Position, Size / 2, Game1.ScreenSize - Size / 2);
 
-            if (Velocity.LengthSquared() > 0)
-            {
-                Orientation = Velocity.ToAngle();
-            }
+            if (Velocity.LengthSquared() > 0) Orientation = Velocity.ToAngle();
 
             Velocity = Vector2.Zero;
         }
@@ -131,14 +124,14 @@ namespace SpaceInvaders.Entity
         public Bullet FireBullet()
         {
             var aim = Input.GetAimDirection();
-            
-            float aimAngle = aim.ToAngle();
-            Quaternion aimQuat = Quaternion.CreateFromYawPitchRoll(0, 0, aimAngle);
 
-            float randomSpread = rand.NextFloat(-0.04f, 0.04f) + rand.NextFloat(-0.04f, 0.04f);
-            Vector2 vel = MathUtil.FromPolar(aimAngle + randomSpread, 11f);
+            var aimAngle = aim.ToAngle();
+            var aimQuat = Quaternion.CreateFromYawPitchRoll(0, 0, aimAngle);
 
-            Vector2 offset = Vector2.Transform(new Vector2(35, 8), aimQuat);
+            var randomSpread = rand.NextFloat(-0.04f, 0.04f) + rand.NextFloat(-0.04f, 0.04f);
+            var vel = MathUtil.FromPolar(aimAngle + randomSpread, 11f);
+
+            var offset = Vector2.Transform(new Vector2(35, 8), aimQuat);
 
             return GetBulletAfterUpgrades(Position + offset, vel);
         }
@@ -147,12 +140,12 @@ namespace SpaceInvaders.Entity
         {
             var bullet = _bulletFactory.CreateBullet(position, velocity);
 
-            bullet.BulletStatistics = _bulletUpgradeLevel switch
+            bullet.BulletStatistics = WeaponUpgradeLevel switch
             {
                 0 => bullet.BulletStatistics,
                 1 => new RangeBulletDecorator(bullet.BulletStatistics),
                 2 => new DoubleDamageDecorator(bullet.BulletStatistics),
-                _ => new DoubleDamageDecorator(new RangeBulletDecorator(bullet.BulletStatistics)),
+                _ => new DoubleDamageDecorator(new RangeBulletDecorator(bullet.BulletStatistics))
             };
 
             return bullet;

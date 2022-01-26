@@ -1,26 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace SpaceInvaders.Core
+﻿namespace SpaceInvaders.Core
 {
     public sealed class PlayerContext
     {
+        private static PlayerContext _instance;
+
         private PlayerContext()
         {
             Reset();
         }
-
-        private static PlayerContext _instance;
 
         public static PlayerContext Instance
         {
             get
             {
                 if (_instance is null) //lazy init
-                {
                     _instance = new PlayerContext();
-                }
 
                 return _instance;
             }
@@ -59,7 +53,6 @@ namespace SpaceInvaders.Core
 
         private void SaveHighScore()
         {
-
         }
     }
 }

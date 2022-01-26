@@ -7,7 +7,6 @@ namespace SpaceInvaders.Entity
     public abstract class Entity
     {
         protected Texture2D _image;
-        public Color Color { get; set; } = Color.White;
         protected EntityState _state;
 
         public Entity()
@@ -15,11 +14,14 @@ namespace SpaceInvaders.Entity
             TransitionToState(new DefaultEntityState());
         }
 
+        public Color Color { get; set; } = Color.White;
+
         public Texture2D Image
         {
             get => _image;
             protected set => _image = value;
         }
+
         public Vector2 Position { get; set; }
 
         public Vector2 Velocity { get; set; }
@@ -51,6 +53,8 @@ namespace SpaceInvaders.Entity
             _state.Draw(spriteBatch);
         }
 
-        public virtual void OnCollision(Entity other) { }
+        public virtual void OnCollision(Entity other)
+        {
+        }
     }
 }

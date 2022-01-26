@@ -9,29 +9,13 @@ namespace SpaceInvaders
 {
     public class Game1 : Game
     {
-        private bool _paused = false;
-        public static Game1 Instance { get; private set; }
-        public static Viewport Viewport { get { return Instance.GraphicsDevice.Viewport; } }
-        public static Vector2 ScreenSize { get { return new Vector2(Viewport.Width, Viewport.Height); } }
-        public static GameTime GameTime { get; private set; }
-
-        private GraphicsDeviceManager _graphics;
-        private SpriteBatch _spriteBatch;
-
-
-        public ICommand FireCommand { get; }
-        public ICommand<WeaponType> ChangeWeaponCommand { get; }
-
-
-
         private State _currentState;
 
-        private State _nextState;
+        private readonly GraphicsDeviceManager _graphics;
 
-        public void ChangeState(State state)
-        {
-          _nextState = state;
-        }
+        private State _nextState;
+        private bool _paused = false;
+        private SpriteBatch _spriteBatch;
 
         public Game1()
         {
@@ -41,7 +25,20 @@ namespace SpaceInvaders
             _graphics.PreferredBackBufferHeight = 1080;
             _graphics.ApplyChanges();
             Content.RootDirectory = "Content";
+        }
 
+        public static Game1 Instance { get; private set; }
+        public static Viewport Viewport => Instance.GraphicsDevice.Viewport;
+        public static Vector2 ScreenSize => new Vector2(Viewport.Width, Viewport.Height);
+        public static GameTime GameTime { get; private set; }
+
+
+        public ICommand FireCommand { get; }
+        public ICommand<WeaponType> ChangeWeaponCommand { get; }
+
+        public void ChangeState(State state)
+        {
+            _nextState = state;
         }
 
         protected override void Initialize()
@@ -59,7 +56,7 @@ namespace SpaceInvaders
             Sound.Load(Content);
 
             _currentState = new MenuState(this, _graphics.GraphicsDevice, Content);
-            
+
 
             //var enemy = _enemyFactory.CreateWeakEnemy(ScreenSize / 2);
             //enemy.SetStrategy(new FollowPlayerStrategy());
@@ -77,7 +74,8 @@ namespace SpaceInvaders
 
             _currentState.Update(gameTime);
 
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed ||
+                Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
             //_currentState.PostUpdate(gameTime);
 
@@ -86,14 +84,11 @@ namespace SpaceInvaders
 
         protected override void Draw(GameTime gameTime)
         {
-
             GraphicsDevice.Clear(Color.Black);
 
             _currentState.Draw(gameTime, _spriteBatch);
 
             base.Draw(gameTime);
         }
-
-        
     }
 }

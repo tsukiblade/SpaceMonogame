@@ -7,15 +7,14 @@ namespace SpaceInvaders.Controls
 {
     public class Button : Component
     {
-        private MouseState _currentMouse;
-
         private readonly SpriteFont _font;
+
+        private readonly Texture2D _texture;
+        private MouseState _currentMouse;
 
         private bool _isHovering;
 
         private MouseState _previousMouse;
-
-        private readonly Texture2D _texture;
 
 
         public Button(Texture2D texture, SpriteFont font)

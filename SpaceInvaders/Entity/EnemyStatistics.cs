@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 
 namespace SpaceInvaders.Entity
 {
@@ -41,6 +38,7 @@ namespace SpaceInvaders.Entity
             return Color.White;
         }
     }
+
     public class EnemyShipStatistics : EnemyStatistics
     {
         public override int GetHealthPoints()
@@ -80,30 +78,21 @@ namespace SpaceInvaders.Entity
 
         public override int GetHealthPoints()
         {
-            if (_enemy is null)
-            {
-                throw new NullReferenceException(nameof(_enemy));
-            }
+            if (_enemy is null) throw new NullReferenceException(nameof(_enemy));
 
             return _enemy.GetHealthPoints();
         }
 
         public override int GetValuePoints()
         {
-            if (_enemy is null)
-            {
-                throw new NullReferenceException(nameof(_enemy));
-            }
+            if (_enemy is null) throw new NullReferenceException(nameof(_enemy));
 
             return _enemy.GetValuePoints();
         }
 
         public override void RemoveHealthPoints(int amount)
         {
-            if (_enemy is null)
-            {
-                throw new NullReferenceException(nameof(_enemy));
-            }
+            if (_enemy is null) throw new NullReferenceException(nameof(_enemy));
 
             _enemy.RemoveHealthPoints(amount);
         }
@@ -122,7 +111,7 @@ namespace SpaceInvaders.Entity
 
         public override int GetValuePoints()
         {
-            return base.GetValuePoints()/2;
+            return base.GetValuePoints() / 2;
         }
 
         public override Color GetColor()

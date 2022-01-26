@@ -1,28 +1,27 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Media;
 
 namespace SpaceInvaders.Core
 {
-    class Sound
+    internal class Sound
     {
-        public static Song Music { get; private set; }
-
         private static readonly Random rand = new Random();
 
         private static SoundEffect[] explosions;
-        // return a random explosion sound
-        public static SoundEffect Explosion { get { return explosions[rand.Next(explosions.Length)]; } }
 
         private static SoundEffect[] shots;
-        public static SoundEffect Shot { get { return shots[rand.Next(shots.Length)]; } }
 
         private static SoundEffect[] spawns;
-        public static SoundEffect Spawn { get { return spawns[rand.Next(spawns.Length)]; } }
+
+        public static Song Music { get; private set; }
+
+        // return a random explosion sound
+        public static SoundEffect Explosion => explosions[rand.Next(explosions.Length)];
+        public static SoundEffect Shot => shots[rand.Next(shots.Length)];
+        public static SoundEffect Spawn => spawns[rand.Next(spawns.Length)];
+
         public static void Load(ContentManager content)
         {
             //Music = content.Load<Song>("Audio/Music");

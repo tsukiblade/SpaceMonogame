@@ -1,9 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.IO;
+using Microsoft.Xna.Framework;
 using SpaceInvaders.Helpers;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
 
 namespace SpaceInvaders.Core
 {
@@ -16,19 +13,17 @@ namespace SpaceInvaders.Core
             set => _builder = value;
         }
 
-        public LevelDirector()
-        {
-        }
-
         public GameLevel ConstructLevel(string fileName)
         {
             //user fileName or smthing later
-            string filePath = @"test.txt";
-            IEnumerable<string> fileLines = File.ReadLines(fileName);
-            foreach (string line in fileLines)
+            var filePath = @"test.txt";
+            var fileLines = File.ReadLines(fileName);
+            foreach (var line in fileLines)
             {
                 var values = ConstructLevelHelper.GetValues(line);
-                Vector2 vector; vector.X = values.X; vector.Y = values.Y;
+                Vector2 vector;
+                vector.X = values.X;
+                vector.Y = values.Y;
                 switch (values.ObjType)
                 {
                     case 1:

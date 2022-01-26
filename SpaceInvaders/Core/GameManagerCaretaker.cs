@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace SpaceInvaders.Core
 {
     public class GameManagerCaretaker
     {
-        readonly List<IGameManagerMemento> _gameManagerMementos = new List<IGameManagerMemento>();
-
         private readonly GameManager _gameManager;
+        private readonly List<IGameManagerMemento> _gameManagerMementos = new List<IGameManagerMemento>();
 
         public GameManagerCaretaker(GameManager gameManager)
         {
@@ -23,10 +21,7 @@ namespace SpaceInvaders.Core
 
         public void Undo()
         {
-            if (_gameManagerMementos.Count == 0)
-            {
-                return;
-            }
+            if (_gameManagerMementos.Count == 0) return;
 
             var memento = _gameManagerMementos.Last();
             _gameManagerMementos.Remove(memento);
@@ -44,9 +39,8 @@ namespace SpaceInvaders.Core
         public void ShowHistory()
         {
             foreach (var memento in _gameManagerMementos)
-            {
-                Console.WriteLine($"Level: {memento.GetLevel()}, Scores amount: {memento.GetScoreData().Count()}, Created {memento.GetDate()}.");
-            }
+                Console.WriteLine(
+                    $"Level: {memento.GetLevel()}, Scores amount: {memento.GetScoreData().Count()}, Created {memento.GetDate()}.");
         }
     }
 }

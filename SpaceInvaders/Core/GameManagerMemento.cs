@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace SpaceInvaders.Core
 {
     public class GameManagerMemento : IGameManagerMemento
     {
-        private int _currentLevel;
-        private List<ScoreData> _scoreData;
-        private DateTime _creationDate;
+        private readonly DateTime _creationDate;
+        private readonly int _currentLevel;
+        private readonly List<ScoreData> _scoreData;
 
         public GameManagerMemento(int currentLevel, List<ScoreData> scoreData)
         {

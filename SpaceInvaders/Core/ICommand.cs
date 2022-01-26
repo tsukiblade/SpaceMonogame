@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using SpaceInvaders.Entity;
 
 namespace SpaceInvaders.Core
@@ -12,7 +9,7 @@ namespace SpaceInvaders.Core
     }
 
     public interface ICommand<T>
-    where T : Enum
+        where T : Enum
     {
         void Execute(T type);
     }
@@ -28,10 +25,7 @@ namespace SpaceInvaders.Core
 
         public void Execute()
         {
-            if (PlayerShip.Instance.IsDead)
-            {
-                return;
-            }
+            if (PlayerShip.Instance.IsDead) return;
             var bullet = PlayerShip.Instance.FireBullet();
             _entityManager.Add(bullet);
         }
@@ -41,21 +35,16 @@ namespace SpaceInvaders.Core
     {
         public void Execute()
         {
-            if (PlayerShip.Instance.IsDead || PlayerContext.Instance.IsGameOver)
-            {
-                return;
-            }
+            if (PlayerShip.Instance.IsDead || PlayerContext.Instance.IsGameOver) return;
             PlayerShip.Instance.UpgradeWeapon();
         }
     }
+
     public class ChangeWeaponCommand : ICommand<WeaponType>
     {
         public void Execute(WeaponType type)
         {
-            if (PlayerShip.Instance.IsDead || PlayerContext.Instance.IsGameOver)
-            {
-                return;
-            }
+            if (PlayerShip.Instance.IsDead || PlayerContext.Instance.IsGameOver) return;
             PlayerShip.Instance.ChangeWeapon(type);
         }
     }

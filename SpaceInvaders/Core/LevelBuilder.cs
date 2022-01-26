@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using Microsoft.Xna.Framework;
 using SpaceInvaders.Entity;
 
@@ -34,12 +33,13 @@ namespace SpaceInvaders.Core
 
         GameLevel GetCompleteLevel();
     }
+
     public class LevelBuilder : ILevelBuilder
     {
-        private List<Entity.Entity> _entities;
         private readonly IEnemyFactory _alienEnemyFactory;
         private readonly IEnemyFactory _enemyShipFactory;
         private readonly IObstacleFactory _obstacleFactory;
+        private readonly List<Entity.Entity> _entities;
 
         public LevelBuilder()
         {
@@ -51,7 +51,7 @@ namespace SpaceInvaders.Core
 
         public void BuildShip(Vector2 position, DifficultyType difficultyType)
         {
-            var entity =  difficultyType switch
+            var entity = difficultyType switch
             {
                 DifficultyType.Standard => _enemyShipFactory.CreateEnemy(position),
                 DifficultyType.Weak => _enemyShipFactory.CreateWeakEnemy(position),
@@ -72,6 +72,7 @@ namespace SpaceInvaders.Core
             };
             _entities.Add(entity);
         }
+
         public void BuildObstacle(Vector2 position)
         {
             var entity = _obstacleFactory.CreateObstacle(position);

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 
 namespace SpaceInvaders.Entity
 {
@@ -11,6 +8,7 @@ namespace SpaceInvaders.Entity
         Bullet CreateDoubleDamageBullet(Vector2 position, Vector2 velocity);
         Bullet CreateBigBullet(Vector2 position, Vector2 velocity);
     }
+
     public class RocketFactory : IBulletFactory
     {
         public Bullet CreateBullet(Vector2 position, Vector2 velocity)

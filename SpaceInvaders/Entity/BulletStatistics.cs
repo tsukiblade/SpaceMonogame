@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace SpaceInvaders.Entity
 {
@@ -9,13 +7,17 @@ namespace SpaceInvaders.Entity
         public abstract int GetDamage();
         public abstract float GetRadius();
 
-        public virtual float GetSpeed() => 1f;
+        public virtual float GetSpeed()
+        {
+            return 1f;
+        }
     }
 
     public class RocketStatistics : BulletStatisticsBase
     {
         private const int baseDamage = 1;
         private const int baseRadius = 5;
+
         public override int GetDamage()
         {
             return baseDamage;
@@ -31,6 +33,7 @@ namespace SpaceInvaders.Entity
     {
         private const int baseDamage = 1;
         private const int baseRadius = 1;
+
         public override int GetDamage()
         {
             return baseDamage;
@@ -46,6 +49,7 @@ namespace SpaceInvaders.Entity
     {
         private const int baseDamage = 2;
         private const int baseRadius = 15;
+
         public override int GetDamage()
         {
             return baseDamage;
@@ -75,30 +79,21 @@ namespace SpaceInvaders.Entity
 
         public override int GetDamage()
         {
-            if (_bullet is null)
-            {
-                throw new NullReferenceException(nameof(_bullet));
-            }
+            if (_bullet is null) throw new NullReferenceException(nameof(_bullet));
 
             return _bullet.GetDamage();
         }
 
         public override float GetRadius()
         {
-            if (_bullet is null)
-            {
-                throw new NullReferenceException(nameof(_bullet));
-            }
+            if (_bullet is null) throw new NullReferenceException(nameof(_bullet));
 
             return _bullet.GetRadius();
         }
 
         public override float GetSpeed()
         {
-            if (_bullet is null)
-            {
-                throw new NullReferenceException(nameof(_bullet));
-            }
+            if (_bullet is null) throw new NullReferenceException(nameof(_bullet));
 
             return _bullet.GetSpeed();
         }

@@ -13,7 +13,7 @@ namespace SpaceInvaders.Entity
         }
 
         public abstract void Draw(SpriteBatch spriteBatch);
-        
+
         public abstract void HandleCollision(Entity other);
     }
 
@@ -21,7 +21,8 @@ namespace SpaceInvaders.Entity
     {
         public override void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(EntityContext.Image, EntityContext.Position, null, EntityContext.Color, EntityContext.Orientation, EntityContext.Size / 2f, 1f, 0, 0);
+            spriteBatch.Draw(EntityContext.Image, EntityContext.Position, null, EntityContext.Color,
+                EntityContext.Orientation, EntityContext.Size / 2f, 1f, 0, 0);
         }
 
         public override void HandleCollision(Entity other)
@@ -36,8 +37,9 @@ namespace SpaceInvaders.Entity
     {
         public override void Draw(SpriteBatch spriteBatch)
         {
-            if (GameState.GameTime.TotalGameTime.Milliseconds%6 == 0)
-                spriteBatch.Draw(EntityContext.Image, EntityContext.Position, null, EntityContext.Color, EntityContext.Orientation, EntityContext.Size / 2f, 1f, 0, 0);
+            if (GameState.GameTime.TotalGameTime.Milliseconds % 6 == 0)
+                spriteBatch.Draw(EntityContext.Image, EntityContext.Position, null, EntityContext.Color,
+                    EntityContext.Orientation, EntityContext.Size / 2f, 1f, 0, 0);
         }
 
         public override void HandleCollision(Entity other)

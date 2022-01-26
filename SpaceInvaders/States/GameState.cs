@@ -11,25 +11,20 @@ namespace SpaceInvaders.States
 {
     public class GameState : State
     {
-        private bool _paused = false;
-        public static Game1 Instance { get; private set; }
-        public static Viewport Viewport => Instance.GraphicsDevice.Viewport;
-        public static Vector2 ScreenSize => new Vector2(Viewport.Width, Viewport.Height);
-        public static GameTime GameTime { get; private set; }
-        GameManagerCaretaker caretaker;
-        //public static int currentLevel = 0;
-        private SpriteBatch _spriteBatch;
-        private EntityManager _entityManager;
-        private GameManager gameManager;
-        public ICommand FireCommand { get; }
-        public ICommand UpgradeWeaponCommand { get; }
-        public ICommand<WeaponType> ChangeWeaponCommand { get; }
-        private bool ignore = false;
+        private readonly EntityManager _entityManager;
 
-        private ComponentComposite uiStringsComposite;
+        private bool _paused;
+
+        //public static int currentLevel = 0;
+        private readonly SpriteBatch _spriteBatch;
+        private readonly GameManagerCaretaker caretaker;
+        private readonly GameManager gameManager;
+        private bool ignore;
+
+        private readonly ComponentComposite uiStringsComposite;
 
         public GameState(Game1 game, GraphicsDevice graphicsDevice, ContentManager content)
-          : base(game, graphicsDevice, content)
+            : base(game, graphicsDevice, content)
         {
             Instance = game;
             _entityManager = new EntityManager();
@@ -53,15 +48,22 @@ namespace SpaceInvaders.States
             Initialize();
         }
 
+        public static Game1 Instance { get; private set; }
+        public static Viewport Viewport => Instance.GraphicsDevice.Viewport;
+        public static Vector2 ScreenSize => new Vector2(Viewport.Width, Viewport.Height);
+        public static GameTime GameTime { get; private set; }
+        public ICommand FireCommand { get; }
+        public ICommand UpgradeWeaponCommand { get; }
+        public ICommand<WeaponType> ChangeWeaponCommand { get; }
+
         private void Initialize()
         {
-            uiStringsComposite.Add(new TitleSafeAlignedString($"UIText", 5));
+            uiStringsComposite.Add(new TitleSafeAlignedString("UIText", 5));
             uiStringsComposite.Add(new TitleSafeRightAlignedString("Score text" + PlayerContext.Instance.Score, 5));
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-
             _spriteBatch.Begin(SpriteSortMode.Texture, BlendState.Additive);
             _entityManager.Draw(_spriteBatch);
             _spriteBatch.End();
@@ -75,28 +77,25 @@ namespace SpaceInvaders.States
                                                         $"Level: {GameManager.Instance.CurrentLevel}");
             uiStringsComposite.UpdateRightAlignedStrings("Score: " + PlayerContext.Instance.Score);
             uiStringsComposite.Draw(gameTime, _spriteBatch);
-            if (_paused)
-            {
-                DrawTitleSafeCenterAlignedString("Paused", (int)(Game1.ScreenSize.Y / 2));
-            }
+            if (_paused) DrawTitleSafeCenterAlignedString("Paused", (int)(Game1.ScreenSize.Y / 2));
 
             _spriteBatch.Draw(Art.Pointer, Input.MousePosition, Color.White);
 
             if (PlayerContext.Instance.IsGameOver)
             {
-                string text = "Game Over\n" +
-                              "Your Score: " + PlayerContext.Instance.Score + "\n";
+                var text = "Game Over\n" +
+                           "Your Score: " + PlayerContext.Instance.Score + "\n";
                 //"High Score: " + PlayerStatus.HighScore;
 
-                Vector2 textSize = Art.Font.MeasureString(text);
+                var textSize = Art.Font.MeasureString(text);
                 _spriteBatch.DrawString(Art.Font, text, ScreenSize / 2 - textSize / 2, Color.White);
             }
+
             _spriteBatch.End();
         }
 
         public override void PostUpdate(GameTime gameTime)
         {
-
         }
 
         public override void Update(GameTime gameTime)
@@ -106,25 +105,16 @@ namespace SpaceInvaders.States
 
             /* input controls */
 
-            if (Input.WasKeyPressed(Keys.P))
-            {
-                _paused = !_paused;
-            }
+            if (Input.WasKeyPressed(Keys.P)) _paused = !_paused;
 
-            if (Input.WasFireKeyPressed())
-            {
-                FireCommand.Execute(); //execute command
-            }
-            
+            if (Input.WasFireKeyPressed()) FireCommand.Execute(); //execute command
+
             ChangeWeaponType();
-            
 
-            if (!_paused)
-            {
-                _entityManager.Update();
-            }
 
-            
+            if (!_paused) _entityManager.Update();
+
+
             if (Input.WasKeyPressed(Keys.X))
             {
                 caretaker.Undo();
@@ -132,56 +122,36 @@ namespace SpaceInvaders.States
                 ignore = true;
             }
 
-            if(_entityManager.GetEnemyCount() == 0)
+            if (_entityManager.GetEnemyCount() == 0)
             {
                 // _entityManager.ClearObstacles();
-                if (!ignore)
-                {
-                    NextLevel();
-                }
+                if (!ignore) NextLevel();
                 ignore = false;
             }
         }
+
         private void NextLevel(bool sameLevel = false)
         {
-            string nextLevelFilePath = ConstructLevelHelper.GetNextLevelPath(sameLevel);
+            var nextLevelFilePath = ConstructLevelHelper.GetNextLevelPath(sameLevel);
             if (nextLevelFilePath != null)
             {
                 _entityManager.DestroyAllExceptPlayer();
                 foreach (var entity in GameManager.Instance.LoadGameLevel(nextLevelFilePath))
-                {
                     //loading every entity from game level
                     _entityManager.Add(entity);
-                }
                 caretaker.Backup();
-            }
-            else
-            {
-                //OUT OF LEVELS OR CANT FIND, KICK OUT TO MAIN MENU OR SOMETHING
             }
         }
 
         private void ChangeWeaponType()
         {
-            if (Input.WasRocketKeyPressed())
-            {
-                ChangeWeaponCommand.Execute(WeaponType.Rocket);
-            }
+            if (Input.WasRocketKeyPressed()) ChangeWeaponCommand.Execute(WeaponType.Rocket);
 
-            if (Input.WasBombKeyPressed())
-            {
-                ChangeWeaponCommand.Execute(WeaponType.Bomb);
-            }
+            if (Input.WasBombKeyPressed()) ChangeWeaponCommand.Execute(WeaponType.Bomb);
 
-            if (Input.WasLaserKeyPressed())
-            {
-                ChangeWeaponCommand.Execute(WeaponType.Laser);
-            }
+            if (Input.WasLaserKeyPressed()) ChangeWeaponCommand.Execute(WeaponType.Laser);
 
-            if (Input.WasUpgradeButtonPressed())
-            {
-                UpgradeWeaponCommand.Execute();
-            }
+            if (Input.WasUpgradeButtonPressed()) UpgradeWeaponCommand.Execute();
         }
 
         private void DrawRightAlignedString(string text, float y)
@@ -198,15 +168,18 @@ namespace SpaceInvaders.States
         private void DrawTitleSafeRightAlignedString(string text, float y)
         {
             var textWidth = Art.Font.MeasureString(text).X;
-            _spriteBatch.DrawString(Art.Font, text, new Vector2(ScreenSize.X - textWidth - 5 - Viewport.TitleSafeArea.X, Viewport.TitleSafeArea.Y + y), Color.White);
+            _spriteBatch.DrawString(Art.Font, text,
+                new Vector2(ScreenSize.X - textWidth - 5 - Viewport.TitleSafeArea.X, Viewport.TitleSafeArea.Y + y),
+                Color.White);
         }
 
         private void DrawTitleSafeCenterAlignedString(string text, float y)
         {
             var textWidth = Art.Font.MeasureString(text).X;
             var textHeight = Art.Font.MeasureString(text).Y;
-            _spriteBatch.DrawString(Art.Font, text, new Vector2(ScreenSize.X / 2 - textWidth - 5 - Viewport.TitleSafeArea.X, ScreenSize.Y / 2 - textHeight - Viewport.TitleSafeArea.Y + y), Color.White);
+            _spriteBatch.DrawString(Art.Font, text,
+                new Vector2(ScreenSize.X / 2 - textWidth - 5 - Viewport.TitleSafeArea.X,
+                    ScreenSize.Y / 2 - textHeight - Viewport.TitleSafeArea.Y + y), Color.White);
         }
     }
-
 }

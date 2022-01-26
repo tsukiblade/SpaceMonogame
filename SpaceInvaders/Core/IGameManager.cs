@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace SpaceInvaders.Core
+﻿namespace SpaceInvaders.Core
 {
     public interface IGameManager
     {

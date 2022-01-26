@@ -9,11 +9,10 @@ namespace SpaceInvaders.Entity
     {
         protected int _baseDamage = 1;
 
-        public BulletStatisticsBase BulletStatistics { get; set; }
-
         public Bullet()
         {
         }
+
         public Bullet(Texture2D image, Vector2 position, Vector2 velocity)
         {
             _image = image;
@@ -23,22 +22,18 @@ namespace SpaceInvaders.Entity
             Radius = 8; //depends
         }
 
+        public BulletStatisticsBase BulletStatistics { get; set; }
+
         public abstract int GetDamage();
 
         public override void Update()
         {
-            if (Velocity.LengthSquared() > 0)
-            {
-                Orientation = Velocity.ToAngle();
-            }
-            
+            if (Velocity.LengthSquared() > 0) Orientation = Velocity.ToAngle();
+
             Position += Velocity;
 
             //delete bullet that go off-screen
-            if (!Game1.Viewport.Bounds.Contains(Position.ToPoint()))
-            {
-                IsExpired = true;
-            }
+            if (!Game1.Viewport.Bounds.Contains(Position.ToPoint())) IsExpired = true;
         }
     }
 
@@ -65,6 +60,7 @@ namespace SpaceInvaders.Entity
     public class Bomb : Bullet
     {
         private int _framesToExplode = 50;
+
         public Bomb(Vector2 position, Vector2 velocity) : base(Art.Bomb, position, velocity * 0.5f)
         {
             BulletStatistics = new BombStatistics();
@@ -74,14 +70,10 @@ namespace SpaceInvaders.Entity
         {
             Radius = BulletStatistics.GetRadius();
             if (_framesToExplode <= 0)
-            {
                 //explode
                 IsExpired = true;
-            }
             else
-            {
                 --_framesToExplode;
-            }
 
             base.Update();
         }

@@ -16,7 +16,6 @@ namespace SpaceInvaders.Controls
 
         public virtual void UpdateText(string text)
         {
-
         }
 
         public virtual void Add(Component component)
@@ -80,7 +79,8 @@ namespace SpaceInvaders.Controls
     public class RightAlignedString : Component
     {
         private string _text;
-        private float _y;
+        private readonly float _y;
+
         public RightAlignedString(string text, float y)
         {
             _text = text;
@@ -90,12 +90,14 @@ namespace SpaceInvaders.Controls
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             var textWidth = Art.Font.MeasureString(_text).X;
-            spriteBatch.DrawString(Art.Font, _text, new Vector2(GameState.ScreenSize.X - textWidth - 5, _y), Color.White);
+            spriteBatch.DrawString(Art.Font, _text, new Vector2(GameState.ScreenSize.X - textWidth - 5, _y),
+                Color.White);
         }
 
         public override void Update(GameTime gameTime)
         {
         }
+
         public override void UpdateText(string text)
         {
             _text = text;
@@ -105,7 +107,8 @@ namespace SpaceInvaders.Controls
     public class TitleSafeAlignedString : Component
     {
         private string _text;
-        private float _y;
+        private readonly float _y;
+
         public TitleSafeAlignedString(string text, float y)
         {
             _text = text;
@@ -120,6 +123,7 @@ namespace SpaceInvaders.Controls
         public override void Update(GameTime gameTime)
         {
         }
+
         public override void UpdateText(string text)
         {
             _text = text;
@@ -129,7 +133,8 @@ namespace SpaceInvaders.Controls
     public class TitleSafeRightAlignedString : Component
     {
         private string _text;
-        private float _y;
+        private readonly float _y;
+
         public TitleSafeRightAlignedString(string text, float y)
         {
             _text = text;
@@ -139,7 +144,9 @@ namespace SpaceInvaders.Controls
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             var textWidth = Art.Font.MeasureString(_text).X;
-            spriteBatch.DrawString(Art.Font, _text, new Vector2(GameState.ScreenSize.X - textWidth - 5 - GameState.Viewport.TitleSafeArea.X, GameState.Viewport.TitleSafeArea.Y + _y), Color.White);
+            spriteBatch.DrawString(Art.Font, _text,
+                new Vector2(GameState.ScreenSize.X - textWidth - 5 - GameState.Viewport.TitleSafeArea.X,
+                    GameState.Viewport.TitleSafeArea.Y + _y), Color.White);
         }
 
         public override void UpdateText(string text)

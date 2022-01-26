@@ -1,44 +1,28 @@
-﻿using SpaceInvaders.Constants;
-using SpaceInvaders.Core;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Globalization;
 using System.IO;
-using System.Text;
+using SpaceInvaders.Constants;
+using SpaceInvaders.Core;
 
 namespace SpaceInvaders.Helpers
 {
     public static class ConstructLevelHelper
     {
-        public class ValueObject
-        {
-            public float X { get; set; }
-            public float Y { get; set; }
-            public int ObjType { get; set; }
-            public int DiffType { get; set; }
-        }
         public static ValueObject GetValues(string str)
         {
             var obj = new ValueObject();
             ReadOnlySpan<char> span = str;
-            int indexX = span.IndexOf('x');
-            int indexY = span.IndexOf('y');
-            int indexT = span.IndexOf('t');
-            int indexD = span.IndexOf('d');
-            int indexS = span.IndexOf('s');
-            if(indexX == -1 || indexY == -1 || indexT == -1)
-            {
-                throw new Exception("Invalid input.");
-            }
+            var indexX = span.IndexOf('x');
+            var indexY = span.IndexOf('y');
+            var indexT = span.IndexOf('t');
+            var indexD = span.IndexOf('d');
+            var indexS = span.IndexOf('s');
+            if (indexX == -1 || indexY == -1 || indexT == -1) throw new Exception("Invalid input.");
 
-            if(indexD == -1)
-            {
+            if (indexD == -1)
                 indexD = indexT + 2;
-            }
             else
-            {
                 obj.DiffType = Convert.ToInt32(span[(indexD + 1)..].ToString());
-            }
 
             obj.X = float.Parse(span[(indexX + 1)..indexY].ToString(), CultureInfo.InvariantCulture.NumberFormat);
             obj.Y = float.Parse(span[(indexY + 1)..indexT].ToString(), CultureInfo.InvariantCulture.NumberFormat);
@@ -50,24 +34,29 @@ namespace SpaceInvaders.Helpers
         public static string GetNextLevelPath(bool sameLevel = false)
         {
             //record score and get next level if exists
-            string directory = Paths.LevelsPath;
+            var directory = Paths.LevelsPath;
             //var gameManager = GameManager.Instance;
-            ScoreData scoreData = new ScoreData()
+            var scoreData = new ScoreData
             {
-                Score = PlayerContext.Instance.Score,
+                Score = PlayerContext.Instance.Score
             };
             GameManager.ScoreData.Add(scoreData);
-            int currentLevel = sameLevel ? GameManager.Instance.CurrentLevel - 1 : GameManager.Instance.CurrentLevel++;
+            var currentLevel = sameLevel ? GameManager.Instance.CurrentLevel - 1 : GameManager.Instance.CurrentLevel++;
 
-            string suffixExtension = ".txt";
-            string currentLevelFilePath = Directory.GetCurrentDirectory() + directory + currentLevel + suffixExtension;
+            var suffixExtension = ".txt";
+            var currentLevelFilePath = Directory.GetCurrentDirectory() + directory + currentLevel + suffixExtension;
 
-            if (!File.Exists(currentLevelFilePath))
-            {
-                return null;
-            }
+            if (!File.Exists(currentLevelFilePath)) return null;
 
             return currentLevelFilePath;
+        }
+
+        public class ValueObject
+        {
+            public float X { get; set; }
+            public float Y { get; set; }
+            public int ObjType { get; set; }
+            public int DiffType { get; set; }
         }
     }
 }

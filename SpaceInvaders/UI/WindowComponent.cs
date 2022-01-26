@@ -1,16 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using Microsoft.Xna.Framework;
 
 namespace SpaceInvaders.UI
 {
     public abstract class WindowComponent
-    {   
-        public WindowComponent()
-        {
-        }
-
+    {
         public abstract void Operation(); //some shared operation
 
         public abstract void Render();
