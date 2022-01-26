@@ -15,7 +15,7 @@ namespace SpaceInvaders.Entity
 
         public Obstacle(Vector2 position)
         {
-            _image = Art.Pointer;
+            _image = Art.Obstacle;
             Position = position;
             Radius = 15; //todo change that
         }

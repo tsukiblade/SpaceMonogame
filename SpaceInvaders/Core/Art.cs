@@ -10,6 +10,7 @@ namespace SpaceInvaders.Core
     static class Art
     {
         public static Texture2D Player { get; private set; }
+        public static Texture2D Obstacle { get; private set; }
         public static SpriteFont Font { get; private set; }
         public static Texture2D Pixel { get; private set; }		// a single white pixel
         public static Texture2D Pointer { get; private set; }
@@ -23,6 +24,7 @@ namespace SpaceInvaders.Core
         public static void Load(ContentManager content)
         {
             Player = content.Load<Texture2D>("Art/Player");
+            Obstacle = content.Load<Texture2D>("Art/Obstacle");
 
             Pointer = content.Load<Texture2D>("Art/Pointer");
 
